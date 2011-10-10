@@ -151,11 +151,9 @@
 							email_add varchar(32),
 							with_username varchar(32),
 							trans_id int,
-							cat_id int,
 							with_amt int,
 							constraint participates_pk primary key (email_add, with_username, trans_id),
-							constraint participates_fk1 foreign key (email_add) references users(email_add),
-							constraint participates_fk2 foreign key (trans_id, cat_id) references transaction(trans_id, cat_id))');
+							constraint participates_fk1 foreign key (email_add) references users(email_add))');
 		if (!oci_execute($statement))
 		{
 			die("PARTICIPATES table creation failed!");
@@ -175,11 +173,10 @@
 		$statement = oci_parse($connection, 'create table shares(
 							email_add varchar(32),
 							trans_id int,
-							cat_id int,
 							shared_amt int,
 							constraint shares_pk primary key (email_add, trans_id),
 							constraint shares_fk1 foreign key (email_add) references users(email_add),
-							constraint shares_fk2 foreign key (trans_id, cat_id) references transaction(trans_id, cat_id))');
+							constraint shares_fk2 foreign key (trans_id) references transaction(trans_id))');
 		if (!oci_execute($statement))
 		{
 			die("SHARES table creation failed!");

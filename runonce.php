@@ -16,10 +16,10 @@
 	{
 		$statement = oci_parse($connection, 'create table users(
 							email_add varchar(32),
-							password varchar(32),
-							bank_balance int,
-							ph_no int,
-							monthly_budget int,
+							password varchar(32) not null,
+							bank_balance numeric(10,2),
+							ph_no varchar(16),
+							monthly_budget numeric,
 							constraint user_pk primary key (email_add))');
 		if (!oci_execute($statement))
 		{
@@ -62,7 +62,7 @@
 							cat_id int,
 							type char(2),
 							txn_desc varchar(64),
-							tot_amt int,
+							tot_amt numeric(10,2),
 							txn_date date,
 							constraint transaction_pk primary key (trans_id, cat_id),
 							constraint transaction_fk foreign key (cat_id) references category(cat_id))');
@@ -105,7 +105,7 @@
 		$statement = oci_parse($connection, 'create table has_friends(
 							email_add varchar(32),
 							friend_email_add varchar(32),
-							dues int,
+							dues numeric(10,2),
 							constraint has_friends_pk primary key (email_add, friend_email_add),
 							constraint has_friends_fk1 foreign key (friend_email_add) references users(email_add),
 							constraint has_friends_fk2 foreign key (email_add) references users(email_add))');
@@ -152,8 +152,8 @@
 							with_username varchar(32),
 							trans_id int,
 							cat_id int,
-							with_amt int,
-							constraint participates_pk primary key (email_add, with_username, trans_id),
+							with_amt numeric(10,2),
+							constraint participates_pk primary key (email_add, with_username, trans_id, cat_id),
 							constraint participates_fk1 foreign key (email_add) references users(email_add),
 							constraint participates_fk2 foreign key (trans_id, cat_id) references transaction(trans_id, cat_id))');
 		if (!oci_execute($statement))
@@ -176,8 +176,8 @@
 							email_add varchar(32),
 							trans_id int,
 							cat_id int,
-							shared_amt int,
-							constraint shares_pk primary key (email_add, trans_id),
+							shared_amt numeric(10,2),
+							constraint shares_pk primary key (email_add, trans_id, cat_id),
 							constraint shares_fk1 foreign key (email_add) references users(email_add),
 							constraint shares_fk2 foreign key (trans_id, cat_id) references transaction(trans_id, cat_id))');
 		if (!oci_execute($statement))

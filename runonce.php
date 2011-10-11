@@ -17,6 +17,7 @@
 		$statement = oci_parse($connection, 'create table users(
 							email_add varchar(32),
 							password varchar(32) not null,
+							name varchar(32),
 							bank_balance numeric(10,2),
 							ph_no varchar(16),
 							monthly_budget numeric,
@@ -25,11 +26,11 @@
 		{
 			die("USERS table creation failed!");
 		}
-		echo "\nUSERS table created!\n";
+		echo "<br />USERS table created!<br />";
 	}
 	else
 	{
-		echo "\nUSERS table already present!\n";
+		echo "<br />USERS table already present!<br />";
 	}
 
 	//CATEGORY
@@ -45,11 +46,11 @@
 		{
 			die("CATEGORY table creation failed!");
 		}
-		echo "\nCATEGORY table created!\n";
+		echo "<br />CATEGORY table created!<br />";
 	}
 	else
 	{
-		echo "\nCATEGORY table already present!\n";
+		echo "<br />CATEGORY table already present!<br />";
 	}
 
 	//TRANSACTION
@@ -70,11 +71,11 @@
 		{
 			die("TRANSACTION table creation failed!");
 		}
-		echo "\nTRANSACTION table created!\n";
+		echo "<br />TRANSACTION table created!<br />";
 	}
 	else
 	{
-		echo "\nTRANSACTION table already present!\n";
+		echo "<br />TRANSACTION table already present!<br />";
 	}
 
 	//USERGROUP
@@ -84,17 +85,19 @@
 	{
 		$statement = oci_parse($connection, 'create table usergroup(
 							group_id int,
+							group_owner varchar(32),
 							group_name varchar(64),
-							constraint group_pk primary key (group_id))');
+							constraint group_pk primary key (group_id),
+							constraint group_fk foreign key (group_name) references users(email_add))');
 		if (!oci_execute($statement))
 		{
 			die("USERGROUP table creation failed!");
 		}
-		echo "\nUSERGROUP table created!\n";
+		echo "<br />USERGROUP table created!<br />";
 	}
 	else
 	{
-		echo "\nUSERGROUP table already present!\n";
+		echo "<br />USERGROUP table already present!<br />";
 	}
 
 	//HAS_FRIENDS
@@ -113,11 +116,11 @@
 		{
 			die("HAS_FRIENDS table creation failed!");
 		}
-		echo "\nHAS_FRIENDS table created!\n";
+		echo "<br />HAS_FRIENDS table created!<br />";
 	}
 	else
 	{
-		echo "\nHAS_FRIENDS table already present!\n";
+		echo "<br />HAS_FRIENDS table already present!<br />";
 	}
 
 	//BELONGS_TO
@@ -135,11 +138,11 @@
 		{
 			die("BELONGS_TO table creation failed!");
 		}
-		echo "\nBELONGS_TO table created!\n";
+		echo "<br />BELONGS_TO table created!<br />";
 	}
 	else
 	{
-		echo "\nBELONGS_TO table already present!\n";
+		echo "<br />BELONGS_TO table already present!<br />";
 	}
 
 	//PARTICIPATES
@@ -160,11 +163,11 @@
 		{
 			die("PARTICIPATES table creation failed!");
 		}
-		echo "\nPARTICIPATES table created!\n";
+		echo "<br />PARTICIPATES table created!<br />";
 	}
 	else
 	{
-		echo "\nPARTICIPATES table already present!\n";
+		echo "<br />PARTICIPATES table already present!<br />";
 	}
 
 	//SHARES
@@ -184,11 +187,11 @@
 		{
 			die("SHARES table creation failed!");
 		}
-		echo "\nSHARES table created!\n";
+		echo "<br />SHARES table created!<br />";
 	}
 	else
 	{
-		echo "\nSHARES table already present!\n";
+		echo "<br />SHARES table already present!<br />";
 	}
 
 

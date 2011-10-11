@@ -40,6 +40,10 @@
 			header("Location:home.php");
 		}
 	}
+	else if(isset($_POST['signup'])) // if the signup button is clicked, redirect to signup.php page
+	{
+		header("Location:signUp.php");
+	}
 ?>
 
 <form name = 'login' action = 'index.php' method = 'post'>
@@ -53,7 +57,7 @@
 		<tr>
 			<td align = 'center' colspan = '2'>
 				<input name = 'login' type = 'submit' value = 'Sign In' />
-				<input name = 'signup' type = 'button' value = 'Sign Up' />
+				<input name = 'signup' type = 'submit' value = 'Sign Up' />
 			</td>
 		</tr>
 	</table>

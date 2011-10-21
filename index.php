@@ -1,6 +1,6 @@
 #!/usr/local/bin/php
 
-<?php session_start() ?>
+<?php session_start(); ?>
 
 <html>
 <head>
@@ -21,8 +21,11 @@
 		$pwd = md5($_POST['password']);
 		$usrname = $_POST['username'];
 
+		$query = "select name from users where email_add = '".$usrname."' and password = '".$pwd."'";
+		//echo $query;
+
 		// check for a valid username and password combination
-		$stmt = oci_parse($connection, "select name from users where email_add = '$usrname' and password = '$pwd'");
+		$stmt = oci_parse($connection, $query);
 		if (!oci_execute($stmt))
 		{
 			die("Failed to execute query");
@@ -36,7 +39,8 @@
 		}
 		else
 		{
-			$_SESSION['usrname'] = $row['name'];
+			$_SESSION['email'] = $usrname;
+			$_SESSION['alias'] = $row->name;
 			header("Location:home.php");
 		}
 	}
@@ -46,7 +50,7 @@
 	}
 ?>
 
-<form name = 'login' action = 'index.php' method = 'post'>
+<form name = 'loginform' action = 'index.php' method = 'post'>
 	<table align = 'center' border = '0'>
 		<tr>
 			<td>Username:</td><td><input name = 'username' type = 'text' /></td>

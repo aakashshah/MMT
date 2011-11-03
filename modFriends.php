@@ -1,0 +1,63 @@
+#!/usr/local/bin/php
+<?php session_start();
+
+	if (!isset($_SESSION['email']))
+	{
+		header("Location:index.php");
+	}
+
+	if (!require("connection.php"))
+	{
+		// connection failure return error code 1
+		exit(1);
+	}
+
+	if(isset($_POST['add_email']))
+	{
+		$query = "insert into has_friends values ('".$_SESSION['email']."', '".$_POST['adding_email']."', 0)";
+		$statement = oci_parse($connection, $query);
+
+		if (!oci_execute($statement))
+		{
+			echo $query;
+			die("Friend not added!");
+		}
+		echo "\nFriend added!\n";
+		header("Location:home.php");
+	}
+	else if (isset($_POST['delete_email']))
+	{
+		$query = "delete from has_friends where email_add = '".$_SESSION['email']."' and friend_email_add = '".$_POST['deleting_email']."' and dues = 0";
+		$statement = oci_parse($connection, $query);
+
+		if (!oci_execute($statement))
+		{
+			echo $query;
+			die("Friend cannot be deleted! Check that you have no dues with this friend");
+		}
+		echo "\nFriend deleted!\n";
+		header("Location:home.php");
+	}
+?>
+
+<html>
+
+<body>
+
+<form name="input" action="modFriends.php" method="post">
+
+Add a friend (Enter his/her email-address): <input type="text" name="adding_email" />
+
+<input name="add_email" type="submit" value="add" />
+<br />
+<br />
+<br />
+<br />
+Delete a friend (Enter his/her email-address): <input type="text" name="deleting_email" />
+
+<input name="delete_email" type="submit" value="delete" />
+
+</form>
+</body>
+
+</html>

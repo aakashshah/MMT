@@ -38,6 +38,15 @@
 		{
 			$mbudget = $_POST['mbudget'];
 		}
+
+		if ("" == $_POST['phno'])
+		{
+			$phno = '0000000000';
+		}
+		else
+		{
+			$phno = $_POST['phno'];
+		}
 		
 		/*
 		echo $usrname;
@@ -48,7 +57,7 @@
 		echo $_POST['mbudget'];*/
 
 		$query = "insert into users values ('".$usrname."', '".$pwd."',
-			'".$_POST['name']."', ".$bankbal.", '".$_POST['phno']."', ".$mbudget.")";
+			'".$_POST['name']."', ".$bankbal.", '".$phno."', ".$mbudget.")";
 		echo $query;
 
 		// Insert values into the table to store the user details

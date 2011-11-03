@@ -13,6 +13,6 @@
 <body>
 	This is the home page <br /></br >
 	<a href = "modFriends.php">Modify Friends</a> <br />
-	<a href = "addTransaction.php">Add Transaction</a> <br />
+	<a href = "addTransaction.php">Modify Friends</a> <br />
 </body>
 </html>

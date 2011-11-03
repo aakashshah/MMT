@@ -27,7 +27,7 @@
 	}
 	else if (isset($_POST['delete_email']))
 	{
-		$query = "delete from has_friends where email_add = '".$_SESSION['email']."' and friend_email_add = '".$_POST['deleting_email']."' and dues = 0";
+		$query = "delete from has_friends where email_add = '".$_SESSION['email']."' and friend_email_add = '".$_POST['deleting_email']."' and dues = 0)";
 		$statement = oci_parse($connection, $query);
 
 		if (!oci_execute($statement))

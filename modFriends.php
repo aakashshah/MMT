@@ -1,4 +1,5 @@
 #!/usr/local/bin/php
+
 <?php session_start();
 
 	if (!isset($_SESSION['email']))
@@ -22,7 +23,6 @@
 			echo $query;
 			die("Friend not added!");
 		}
-		echo "\nFriend added!\n";
 		header("Location:home.php");
 	}
 	else if (isset($_POST['delete_email']))
@@ -35,7 +35,6 @@
 			echo $query;
 			die("Friend cannot be deleted! Check that you have no dues with this friend");
 		}
-		echo "\nFriend deleted!\n";
 		header("Location:home.php");
 	}
 ?>
@@ -49,9 +48,6 @@
 Add a friend (Enter his/her email-address): <input type="text" name="adding_email" />
 
 <input name="add_email" type="submit" value="add" />
-<br />
-<br />
-<br />
 <br />
 Delete a friend (Enter his/her email-address): <input type="text" name="deleting_email" />
 

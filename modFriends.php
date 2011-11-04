@@ -12,6 +12,11 @@
 		// connection failure return error code 1
 		exit(1);
 	}
+	
+	if (!require("mainBar.php"))
+	{
+		die("Failed to include mainbar!");
+	}
 
 	if(isset($_POST['add_email']))
 	{

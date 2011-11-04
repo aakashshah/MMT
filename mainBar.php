@@ -1,17 +1,19 @@
 #!/usr/local/bin/php
 
-<table width="100%" border="0" cellpadding="10" cellspacing="0" bgcolor="#2D2D2D">
+<link rel="stylesheet" href="mmt.css">
+
+<table width="100%" border="0" cellpadding="8" cellspacing="0" bgcolor="#2D2D2D">
 	<tr>
 		<td>
-		<font color="#FFFFFF">Home</font>
+		<a href = "home.php">Home</a>
 		</td>
 		<td width="100%">
 		</td>
 		<td>
-		<font color="#FFFFFF">
+		<a href = "profileSettings.php">
 		<?php session_start();
 			echo ucfirst($_SESSION['alias']);
-		?></font>
+		?></a>
 		</td>
 		<td>
 			<a href = "logout.php">Logout</a>

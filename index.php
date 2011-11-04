@@ -40,7 +40,7 @@
 		else
 		{
 			$_SESSION['email'] = $usrname;
-			$_SESSION['alias'] = $row->name;
+			$_SESSION['alias'] = $row->NAME;
 			header("Location:home.php");
 		}
 	}

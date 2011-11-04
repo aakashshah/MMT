@@ -40,7 +40,7 @@
 ?>
 
 <html>
-<head><title>Modify Friends - MMT</title></head>
+
 <body>
 
 <form name="input" action="modFriends.php" method="post">
@@ -49,42 +49,13 @@ Add a friend (Enter his/her email-address): <input type="text" name="adding_emai
 
 <input name="add_email" type="submit" value="add" />
 <br />
-Delete a friend (Enter his/her email-address): <!--<input type="text" name="deleting_email" />-->
+Delete a friend (Enter his/her email-address): <input type="text" name="deleting_email" />
 
-<select name="deleting_email">
-	<option selected>----</option>
+<select>
 <?php
-	$query = "select friend_email_add from has_friends where email_add = '".$_SESSION['email']."' and dues = 0";
-	$statement = oci_parse($connection, $query);
-	if (!oci_execute($statement))
-	{
-		echo $query;
-		die("Failed to execute query!");
-	}
-	
-	while (1)
-	{
-		$row = oci_fetch_object($statement);
-		
-		if (!$row)
-		{
-			break;
-		}
-		
-		$subQuery = "select name from users where email_add = '".$row->FRIEND_EMAIL_ADD."'";
-		$subStatement = oci_parse($connection, $subQuery);
-		if (!oci_execute($subStatement))
-		{
-			echo $subQuery;
-			die("Failed to execute subquery!");
-		}
-		
-		$friendName = oci_fetch_object($subStatement);
-		
-		echo "<option name= 'delete_email' value = '".$row->FRIEND_EMAIL_ADD."'>".$friendName->NAME." (".$row->FRIEND_EMAIL_ADD.")</option>";
-	}
+	echo hello;
 ?>
-</select>
+<select>
 <input name="delete_email" type="submit" value="delete" />
 
 </form>

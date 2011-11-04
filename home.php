@@ -6,12 +6,20 @@
 	{
 		header("Location:index.php");
 	}
+	
+	if (!require("mainBar.php"))
+	{
+		die("Failed to include mainbar!");
+	}
 ?>
 
 <html>
-<head><title>Home - MMT</title></head>
+<head><title>Home - MMT</title>
+<link rel="stylesheet" href="mmt.css">
+</head>
+
 <body>
-	This is the home page <br /></br >
+	<br /></br >
 	<a href = "modFriends.php">Modify Friends</a> <br />
 	<a href = "addTransaction.php">Add Transaction</a> <br />
 </body>

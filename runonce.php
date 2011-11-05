@@ -88,7 +88,7 @@
 							group_owner varchar(32),
 							group_name varchar(64),
 							constraint group_pk primary key (group_id),
-							constraint group_fk foreign key (group_name) references users(email_add))');
+							constraint group_fk foreign key (group_owner) references users(email_add))');
 		if (!oci_execute($statement))
 		{
 			die("USERGROUP table creation failed!");

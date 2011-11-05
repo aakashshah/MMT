@@ -22,5 +22,6 @@
 	<br /></br >
 	<a href = "modFriends.php">Modify Friends</a> <br />
 	<a href = "addTransaction.php">Add Transaction</a> <br />
+	<a href = "group.php">Modify Groups</a> <br />
 </body>
 </html>

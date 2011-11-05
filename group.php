@@ -53,16 +53,7 @@
 	/***************     Adding a friend to a group  *************************/
 	else if (isset($_POST['group_friend']))
 	{
-		$query = "select group_id from usergroup where group_owner = '".$_SESSION['email']."' and group_name = '".$_POST['to_group']."'";
-		$statement = oci_parse($connection, $query);
-		if (!oci_execute($statement))
-		{
-			echo $query;
-			die ("Failed to execute query!");
-		}
-		
-		$row = oci_fetch_object($statement);
-		$id = $row->GROUP_ID;
+		$id = $_POST['to_group'];
 				
 		$finalQuery = "insert into belongs_to values ('".$_POST['add_friend_email']."',".$id.")";
 		$finalStatement = oci_parse($connection, $finalQuery);
@@ -77,6 +68,7 @@
 	/***************     Deleting a friend from a group  *************************/
 	else if (isset($_POST['delete_friend']))
 	{
+		/*
 		$query = "select group_id from usergroup where group_owner = '".$_SESSION['email']."' and group_name = '".$_POST['gname']."'";
 		$statement = oci_parse($connection, $query);
 		if (!oci_execute($statement))
@@ -86,7 +78,10 @@
 		}
 		
 		$row = oci_fetch_object($statement);
+		
 		$id = $row->GROUP_ID;
+		*/
+		$id = $_POST['gname'];
 		
 		$finalQuery = "delete from belongs_to where email_add = '".$_POST['friend_delete_group']."' and group_id = ".$id;
 		$finalStatement = oci_parse($connection, $finalQuery);
@@ -115,15 +110,62 @@
 	<br />
 	<br />
 	Add a friend to a group<br />
-	Group Name: <input type="text" name="to_group" /></br />
+	<?php
+		$grpQuery = "select group_id, group_name from usergroup where group_owner = '".$_SESSION['email']."'";
+		$statement = oci_parse($connection, $grpQuery);
+		if (!oci_execute($statement))
+		{
+			echo $grpQuery;
+			die ("Failed to execute query!");
+		}
+		
+	?>
+	
+	<!-- Show all groups to the user of which he is the owner -->
+	<select name = "to_group">
+	<?php
+		while (1)
+		{
+			$row = oci_fetch_object($statement);
+			if (!$row)
+			{
+				break;
+			}
+			
+			echo "<option value=".$row->GROUP_ID.">".$row->GROUP_NAME."</option>";
+		}
+	?>
+	</select>
+	<!-- Group Name: <input type="text" name="to_group" /></br /> -->
 	Members: <input type="text" name="add_friend_email" /></br />
 	<input name="group_friend" type="submit" value="Add Friend" />
 	
 	<br />
 	<br />
 	<br />
-	Delete/Modify Groups<br />
-	Enter group name: <input type="text" name="gname" /><br />
+	Modify Groups<br />
+	<select name = "gname">
+	<?php
+		if (!oci_execute($statement))
+		{
+			echo $grpQuery;
+			die ("Failed to execute query!");
+		}
+		
+		while (1)
+		{
+			$row = oci_fetch_object($statement);
+			if (!$row)
+			{
+				break;
+			}
+			
+			/* group names do not allow  */
+			echo "<option value=".$row->GROUP_ID.">".$row->GROUP_NAME."</option>";
+		}
+	?>
+	</select>
+	<!--Enter group name: <input type="text" name="gname" /><br /> -->
 	Enter friend name: <input type="text" name="friend_delete_group" /><br />
 	<input name = "delete_friend" type="submit" value="Delete Friend" />
 </form>

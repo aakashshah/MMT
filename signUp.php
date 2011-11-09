@@ -47,14 +47,6 @@
 		{
 			$phno = $_POST['phno'];
 		}
-		
-		/*
-		echo $usrname;
-		echo $pwd;
-		echo $_POST['name'];
-		echo $bankbal;
-		echo $_POST['phno'];
-		echo $_POST['mbudget'];*/
 
 		$query = "insert into users values ('".$usrname."', '".$pwd."',
 			'".$_POST['name']."', ".$bankbal.", '".$phno."', ".$mbudget.")";
@@ -101,7 +93,7 @@
 				<input name = 'signupnow' type = 'submit' value = 'Sign Up' />
 			</td>
 			<td>
-				<INPUT type = 'button' value = 'Back' onclick = 'history.go(-1)'>
+				<input type = 'button' value = 'Back' onclick = 'history.go(-1)'>
 			</td>
 		</tr>
 	</table>

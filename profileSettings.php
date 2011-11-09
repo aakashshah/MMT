@@ -57,14 +57,6 @@
 		{
 			$phno = $_POST['phno'];
 		}
-		
-		/*
-		echo $usrname;
-		echo $pwd;
-		echo $_POST['name'];
-		echo $bankbal;
-		echo $_POST['phno'];
-		echo $_POST['mbudget'];*/
 
 		$query = "update users set password='".$pwd."', bank_balance=".$bankbal.", ph_no='".$phno."', monthly_budget=".$mbudget." where email_add = '".$_SESSION['email']."'";
 
@@ -76,9 +68,32 @@
 			echo $query;
 			die("Failed to execute query");
 		}
+		
+		$_SESSION['alias'] = $_POST['alias'];
 
 		// after updating the values goto main page again
 		header("Location:home.php");
+	}
+	else if (isset($_POST['deleteAccount']))
+	{
+		if (!require("connection.php"))
+		{
+			// connection failure return error code 1
+			exit(1);
+		}
+		
+		$query = "delete from users where email_add = '".$_SESSION['email']."'";
+		
+		$stmt = oci_parse($connection, $query);
+
+		if (!oci_execute($stmt))
+		{
+			echo $query;
+			die("Failed to execute query");
+		}
+
+		// after updating the values goto main page again
+		header("Location:logout.php");
 	}
 ?>
 
@@ -110,7 +125,14 @@
 				<input name = 'changeNow' type = 'submit' value = 'Update' />
 			</td>
 			<td>
-				<INPUT type = 'button' value = 'Back' onclick = 'history.go(-1)'>
+				<input type = 'button' value = 'Back' onclick = 'history.go(-1)'>
+			</td>
+		</tr>
+		<tr>
+		</tr>
+		<tr>
+			<td align = 'center' colspan = '2'>
+				<input name = 'deleteAccount' type = 'submit' value = 'Delete Account' />
 			</td>
 		</tr>
 	</table>

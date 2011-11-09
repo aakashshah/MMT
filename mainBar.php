@@ -7,6 +7,19 @@
 		<td>
 		<a href = "home.php">Home</a>
 		</td>
+		<td>
+			<?php
+				$give = 0;
+				$collect = 0;
+				
+				$queryGive = "select sum(with_amt) from participates where email_add = ".$_SESSION['email'];
+				$queryCollect = "select sum(with_amt) from participates where with_username = ".$_SESSION['email'];
+			?>
+			<a href='give.php'>Give&nbsp;$<?php echo $give; ?></a>
+		</td>
+		<td>
+			<a href='collect.php'>Collect&nbsp;$<?php echo $collect; ?></a>
+		</td>
 		<td width="100%">
 		</td>
 		<td>

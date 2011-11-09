@@ -96,9 +96,12 @@
 		<tr>
 			<td>Phone Number:</td><td><input name = 'phno' type = 'text' /></td>
 		</tr>
-		<tr>
-			<td align = 'center' colspan = '2'>
+		<tr align = 'center'>
+			<td>
 				<input name = 'signupnow' type = 'submit' value = 'Sign Up' />
+			</td>
+			<td>
+				<INPUT type = 'button' value = 'Back' onclick = 'history.go(-1)'>
 			</td>
 		</tr>
 	</table>

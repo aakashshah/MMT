@@ -20,7 +20,7 @@
 	}
 	
 	// process only if the login button is clicked
-	if(isset($_POST['signupnow']))
+	if(isset($_POST['changeNow']))
 	{
 		if (!require("connection.php"))
 		{
@@ -66,36 +66,35 @@
 		echo $_POST['phno'];
 		echo $_POST['mbudget'];*/
 
-		$query = "insert into users values ('".$usrname."', '".$pwd."',
-			'".$_POST['name']."', ".$bankbal.", '".$phno."', ".$mbudget.")";
-		echo $query;
+		$query = "update users set password='".$pwd."', bank_balance=".$bankbal.", ph_no='".$phno."', monthly_budget=".$mbudget." where email_add = '".$_SESSION['email']."'";
 
 		// Insert values into the table to store the user details
 		$stmt = oci_parse($connection, $query);
 
 		if (!oci_execute($stmt))
 		{
+			echo $query;
 			die("Failed to execute query");
 		}
 
-		// after inserting the values goto main page again
-		header("Location:index.php");
+		// after updating the values goto main page again
+		header("Location:home.php");
 	}
 ?>
 
-<form name = 'signupform' action = 'signUp.php' method = 'post'>
+<form name = 'changeSettings' action = 'profileSettings.php' method = 'post'>
 	<table align = 'center' border = '0'>
 		<tr>
-			<td>Username (Email Address):</td><td><input name = 'username' type = 'text' /></td>
+			<td>Username (Email Address):</td><td><b><?php echo $_SESSION['email']; ?></b></td>
 		</tr>
 		<tr>
-			<td>Password:</td><td><input name = 'password' type = 'password' /></td>
+			<td>New password:</td><td><input name = 'password' type = 'password' /></td>
 		</tr>
 		<tr>
-			<td>Re-enter Password:</td><td><input name = 'repassword' type = 'password' /></td>
+			<td>Re-enter new password:</td><td><input name = 'repassword' type = 'password' /></td>
 		</tr>
 		<tr>
-			<td>Alias:</td><td><input name = 'name' type = 'text' /></td>
+			<td>Alias:</td><td><?php echo "<input name = 'alias' type = 'text' value='".$_SESSION['alias']."'/>"; ?></td>
 		</tr>
 		<tr>
 			<td>Bank Balance:</td><td><input name = 'bankbal' type = 'text' /></td>
@@ -106,9 +105,12 @@
 		<tr>
 			<td>Phone Number:</td><td><input name = 'phno' type = 'text' /></td>
 		</tr>
-		<tr>
-			<td align = 'center' colspan = '2'>
-				<input name = 'signupnow' type = 'submit' value = 'Sign Up' />
+		<tr align = 'center'>
+			<td>
+				<input name = 'changeNow' type = 'submit' value = 'Update' />
+			</td>
+			<td>
+				<INPUT type = 'button' value = 'Back' onclick = 'history.go(-1)'>
 			</td>
 		</tr>
 	</table>

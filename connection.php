@@ -1,5 +1,3 @@
-#!/usr/local/bin/php
-
 <?php
 	$connection = oci_connect($username = 'aakash',
 				  $password = 'password',

@@ -58,7 +58,7 @@
 			$phno = $_POST['phno'];
 		}
 
-		$query = "update users set password='".$pwd."', bank_balance=".$bankbal.", ph_no='".$phno."', monthly_budget=".$mbudget." where email_add = '".$_SESSION['email']."'";
+		$query = "update users set password='".$pwd."', name='".$_POST['alias']."', bank_balance=".$bankbal.", ph_no='".$phno."', monthly_budget=".$mbudget." where email_add = '".$_SESSION['email']."'";
 
 		// Insert values into the table to store the user details
 		$stmt = oci_parse($connection, $query);

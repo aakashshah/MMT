@@ -42,7 +42,7 @@
 					$collect = $row->AMT;
 				}
 				
-				oci_close($connection);
+				//oci_close($connection);
 			?>
 			<a href='give.php'>Give&nbsp;$<?php echo $give; ?></a>
 		</td>

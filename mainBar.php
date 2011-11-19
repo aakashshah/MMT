@@ -23,9 +23,9 @@
 					die("Failed to execute query");
 				}
 				$row = oci_fetch_object($stmt);
-				if ($row)
+				if ($row->AMT)
 				{
-					$give = $row->AMT;
+					$collect = $row->AMT;
 				}
 				
 				$queryCollect = "select sum(with_amt) as amt from participates where with_username = '".$_SESSION['email']."'";
@@ -37,12 +37,10 @@
 				}
 				$row = oci_fetch_object($stmt);
 				
-				if ($row)
+				if ($row->AMT	)
 				{
-					$collect = $row->AMT;
+					$give = $row->AMT;
 				}
-				
-				//oci_close($connection);
 			?>
 			<a href='give.php'>Give&nbsp;$<?php echo $give; ?></a>
 		</td>
@@ -52,7 +50,7 @@
 		<td width="100%">
 		</td>
 		<td>
-		<a href = "profileSettings.php">
+		<a href = "profileSettings.php" title = "<?php echo $_SESSION['email'] ?>">
 		<?php session_start();
 			echo ucfirst($_SESSION['alias']);
 		?></a>

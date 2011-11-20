@@ -1,6 +1,6 @@
 #!/usr/local/bin/php
 
-<script language ="JavaScript" src = "whoPaid.js"></script>
+<script language ="JavaScript" src = "trackPay.js"></script>
 
 <?php session_start();
 
@@ -31,6 +31,12 @@
         }	
         if(isset($_POST['submit']))
 	{   
+		$paidAmt = $_POST['paidAmt'];
+		$emailIds = $_POST['paidEmailIds'];
+
+		$participatedAmt = $_POST['participatedAmt'];
+		$shareEmailIds = $_POST['shareEmailIds'];
+		
 		$queryMaxTxnId = "select MAX(trans_id) as m from transaction";
 		$statement = oci_parse($connection, $queryMaxTxnId);
 		if (!oci_execute($statement))
@@ -51,26 +57,38 @@
 		}
 
 
-		$catId = oci_fetch_object($statementCategory,"cat_id");
+		$catRow = oci_fetch_object($statementCategory);
+		$catId = $catRow->CAT_ID;
 		
+		//update transaction table
 		// trans_id, cat_id, type, txn_desc, tot_amt, date
-		$query = "insert into transaction values (".$txnId.", '', )";
+		$type = "l"; //update transaction type later, TODO
+		$txn_desc = "txn desc" ; //update txn desc later , TODO
+		$txn_amt = (int)$_POST['trans_amt'];
+		$txn_date = $_POST['trans_date'];
+
+		$query = "insert into transaction values ($txnId, $catId,'".$type ."','". $txn_desc."' ,$txn_amt,to_date('".$txn_date ."','yyyy-mm-dd'))";
 		$statement = oci_parse($connection, $query);
 
 		if (!oci_execute($statement))
 		{
 			echo $query;
-			die("tRANSACTION NOT  added!");
+			die("TRANSACTION NOT  added!");
 		}
-		// email_add, trans_id, shared_amt
-                $query = "insert into shares values ('', '', )";
-                $statement = oci_parse($connection, $query);
 
-                if (!oci_execute($statement))
-                {
-                        echo $query;
-                        die("TRANSACTION NOT  added!");
-                }
+		//update SHARES table
+		//email_add, trans_id, cat_id , shared_amt
+		for($i=0; $i < count($participatedAmt); $i++)
+		{
+			$query = "insert into shares values ('$shareEmailIds[$i]', $txnId, $catId,$participatedAmt[$i] )";
+			$statement = oci_parse($connection, $query);
+
+			if (!oci_execute($statement))
+			{
+				echo $query;
+				die("TRANSACTION NOT  added!");
+			}
+		}
 		header("Location:home.php");
 	}
 ?>
@@ -86,18 +104,14 @@
 			<?php
 				while(1)
 				{
-					$row = oci_fetch_object($statementCategory,"cat_desc");
-					//$row="Food";
+					$row = oci_fetch_object($statementCategory);
   					if (!$row)
 					{
 						print "$row not set";
 						break;
 					}
 									
-				//$cat_desc= mysql_result($result,$i,0);
-				//	$cat_desc=oci_result($stmt, "CAT_DESC");
-				//	$cat_id=oci_result($result,"cat_id");
-					echo "<option value = '".$row."'>  ".$row." </option>";
+				echo "<option value = '".$row->CAT_DESC."'>  ".$row->CAT_DESC." </option>";
 
 				}
 			?>
@@ -106,11 +120,13 @@
                         <br><br>Who Paid:<br>
 			<?php
 			echo $_SESSION['email'] ;
-			echo "<input value = 0> </input>";
-			echo "<div id = 'txtHint'></div>";
+			echo "<input type='hidden' value ='".$_SESSION['email'] ."' name ='paidEmailIds[]' > </input>";
+			echo "<input type='text' value = 0 name = 'paidAmt[]'> </input>";
+			echo "<div id = 'whoPaid'></div>";
+			echo "Add Someone: ";
+			echo "<select name = 'nameWhoPaid' onClick='whoPaidFunction(this.value)'  />";
 			?>
 			<br>
-			<select name = 'whoPaid' onChange="whoPaidFunc(this.value)"  />
 			
                         <?php
 
@@ -119,7 +135,6 @@
                                 while(1)
                                 {
                                         $row = oci_fetch_object($statement1);
-                                        //$row="Food";
                                         if (!$row)
                                         {
                                                 break;
@@ -133,16 +148,15 @@
                                         }
 
                                         $friendName = oci_fetch_object($subStatement);
-                                //$cat_desc= mysql_result($result,$i,0);
-                                //      $cat_desc=oci_result($stmt, "CAT_DESC");
-                                //      $cat_id=oci_result($result,"cat_id");
-					 echo "<option value = '".$row->FRIEND_EMAIL_ADD."'>".$friendName->NAME." (".$row->FRIEND_EMAIL_ADD.")</option>";
+					echo "<option value = '".$row->FRIEND_EMAIL_ADD."'>".$friendName->NAME." (".$row->FRIEND_EMAIL_ADD.")</option>";
                                 }
 
                         ?>
                         </select>
 	
-                        <br><br>Who participated:<select name = 'who_participated'  />
+                        <br><br>Who participated:<br>
+			<div id = 'whoParticipated'></div> 
+			Add Someone:<select name = 'who_participated' onClick='whoParticipatedFunction(this.value)' />
 			<?php
 					$query1 = "select friend_email_add from has_friends where email_add = '".$_SESSION['email']."'";
 					$statement1 = oci_parse($connection, $query1);
@@ -157,7 +171,6 @@
 				while(1)
                                 {
                                         $row = oci_fetch_object($statement1);
-                                        //$row="Food";
                                         if (!$row)
                                         {
 						print "breaking";
@@ -174,16 +187,11 @@
 
 					$friendName = oci_fetch_object($subStatement);	
 
-                                //$cat_desc= mysql_result($result,$i,0);
-                                //      $cat_desc=oci_result($stmt, "CAT_DESC");
-                                //      $cat_id=oci_result($result,"cat_id");
-					 echo "<option value = '".$row->FRIEND_EMAIL_ADD."'>".$friendName->NAME." (".$row->FRIEND_EMAIL_ADD.")</option>";
+					echo "<option value = '".$row->FRIEND_EMAIL_ADD."'>".$friendName->NAME." (".$row->FRIEND_EMAIL_ADD.")</option>";
                                 }
                         ?>
 	<br><br>
                         </select>
-			Share: <input name = 'share_amt' type = 'integer' />
-
 			<br><br>	<input name = 'submit' type = 'submit' value = 'Submit' />
 				<input name = 'Back' type = 'submit' value = 'Cancel' />
 			

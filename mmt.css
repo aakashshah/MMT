@@ -1,8 +1,24 @@
 a:link {
-  color: #FFFFFF }
+  color: #DD4B39 }
 a:visited {
-  color: #FFFFFF }
+  color: #DD4B39 }
 a:hover {
-  color: #BDBDBD }
+  color: #000000 }
 a {
   text-decoration: none }
+
+.bar:link {
+  color: #FFFFFF }
+.bar:visited {
+  color: #FFFFFF }
+.bar:hover {
+  color: #BDBDBD }
+.bar {
+  text-decoration: none }
+  
+table, tr, td {
+	
+	border:1px solid black;
+	border-collapse: collapse;
+	padding: 5px;
+}

@@ -14,7 +14,7 @@
 ?>
 
 <html>
-<head><title>Give Details - MMT</title>
+<head><title>Collect Details - MMT</title>
 </head>
 
 <body>

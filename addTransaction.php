@@ -122,7 +122,7 @@
 			?>
 			</select>
 
-                        <br><br>Who Paid:<br>
+                        <br><br><b>Who Paid:</b><br>
 			<?php
 			echo $_SESSION['email'] ;
 			echo "<input type='hidden' value ='".$_SESSION['email'] ."' name ='paidEmailIds[]' > </input>";
@@ -159,7 +159,7 @@
                         ?>
                         </select>
 	
-                        <br><br>Who participated:<br>
+                        <br><br><b>Who participated:</b><br>
 			<div id = 'whoParticipated'></div> 
 			Add Someone:<select name = 'who_participated' onClick='whoParticipatedFunction(this.value)' />
 			<?php

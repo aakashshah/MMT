@@ -15,6 +15,11 @@
 		exit(1);
 	}
 
+        if (!require("mainBar.php"))
+        {
+                die("Failed to include mainbar!");
+        }
+
         $query = "select cat_id,cat_desc from category";
 	$statementCategory = oci_parse($connection, $query);
 	if (!oci_execute($statementCategory))

@@ -16,8 +16,7 @@ a {
 .bar {
   text-decoration: none }
   
-table, tr, td {
-	
+.transactions {
 	border:1px solid black;
 	border-collapse: collapse;
 	padding: 5px;

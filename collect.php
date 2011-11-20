@@ -19,7 +19,7 @@
 
 <body>
 	<br /></br >
-	<table border = "1">
+	<table class = "transactions">
 	<tr>
 	<?php
 		$firstRow = 1;
@@ -34,10 +34,10 @@
 		{
 			if ($firstRow == 1)
 			{
-				echo "<tr><td>Friend</td><td>Amount</td></tr>";
+				echo "<tr><td class = 'transactions'>Friend</td><td class = 'transactions'>Amount</td></tr>";
 				$firstRow = 0;
 			}
-			echo "<tr><td>".$row->FRIEND."</td><td>".$row->AMT."</td></tr>";
+			echo "<tr><td class = 'transactions'>".$row->FRIEND."</td><td class = 'transactions'>".$row->AMT."</td></tr>";
 		}
 	?>
 	</tr>

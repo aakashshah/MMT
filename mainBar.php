@@ -3,7 +3,7 @@
 <table width="100%" border="0" cellpadding="8" cellspacing="0" bgcolor="#2D2D2D">
 	<tr>
 		<td>
-		<a href = "home.php">Home</a>
+		<a class = "bar" href = "home.php">Home</a>
 		</td>
 		<td>
 			<?php
@@ -37,26 +37,26 @@
 				}
 				$row = oci_fetch_object($stmt);
 				
-				if ($row->AMT	)
+				if ($row->AMT)
 				{
 					$give = $row->AMT;
 				}
 			?>
-			<a href='give.php'>Give&nbsp;$<?php echo $give; ?></a>
+			<a class = "bar" href='give.php'>Give&nbsp;$<?php echo $give; ?></a>
 		</td>
 		<td>
-			<a href='collect.php'>Collect&nbsp;$<?php echo $collect; ?></a>
+			<a class = "bar" href='collect.php'>Collect&nbsp;$<?php echo $collect; ?></a>
 		</td>
 		<td width="100%">
 		</td>
 		<td>
-		<a href = "profileSettings.php" title = "<?php echo $_SESSION['email'] ?>">
+		<a class = "bar" href = "profileSettings.php" title = "<?php echo $_SESSION['email'] ?>">
 		<?php session_start();
 			echo ucfirst($_SESSION['alias']);
 		?></a>
 		</td>
 		<td>
-			<a href = "logout.php">Logout</a>
+			<a class = "bar" href = "logout.php" onclick = "if (!confirm('Are you sure?')) return false;">Logout</a>
 		</td>
 	</tr>
 </table>

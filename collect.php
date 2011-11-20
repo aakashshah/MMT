@@ -20,9 +20,10 @@
 <body>
 	<br /></br >
 	<table border = "1">
+	<tr>
 	<?php
 		$firstRow = 1;
-		$query = "select email_add as friend, sum (with_amt) as amt from participates where with_username = '".$_SESSION['email']."' group by email_add order by amt";
+		$query = "select with_username as friend, sum (with_amt) as amt from participates where email_add = '".$_SESSION['email']."' group by with_username order by amt";
 		$statement = oci_parse($connection, $query);
 		if (!oci_execute($statement))
 		{
@@ -39,6 +40,7 @@
 			echo "<tr><td>".$row->FRIEND."</td><td>".$row->AMT."</td></tr>";
 		}
 	?>
+	</tr>
 	</table>
 </body>
 </html>

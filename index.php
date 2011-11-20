@@ -8,6 +8,12 @@
 </head>
 <body>
 
+<table>
+<tr>
+<td>
+<img src = "images/logo.jpg" />
+</td>
+<td width = "100%">
 <?php
 	// process only if the login button is clicked
 	if(isset($_POST['login']))
@@ -66,6 +72,9 @@
 		</tr>
 	</table>
 </form>
+</td>
+</tr>
+<table>
 
 </body>
 </html>

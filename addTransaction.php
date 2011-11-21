@@ -144,8 +144,10 @@
 		//cache amounts to be paid and insert into participates table
 		$i = 0;
 		$j = count($finalAmt)-1;
-		while($i < $j)
+		while($i <= $j)
 		{
+			if($finalAmt[$i] ==0 || $finalAmt[$j] ==0 ) break;
+			
 			if( -($finalAmt[$i]) <= $finalAmt[$j])
 			{	
 				//email_id,with_username,trans_id,cat_id,with_amt
@@ -222,7 +224,7 @@
 			<?php
 			echo "<div id = 'whoPaid'></div>";
 			echo "Add Someone: ";
-			echo "<select name = 'nameWhoPaid' onChange='whoPaidFunction(this.value)'  />";
+			echo '<select name = "nameWhoPaid" onClick="whoPaidFunction(this.value,\'whoPaid\')"  />';
 			?>
 			<br>
 			
@@ -254,7 +256,7 @@
 	
                         <br><br><b>Who participated:</b><br>
 			<div id = 'whoParticipated'></div> 
-			Add Someone:<select name = 'who_participated' onChange='whoParticipatedFunction(this.value)' />
+			Add Someone:<select name = "who_participated" onClick="whoParticipatedFunction(this.value,'whoParticipated')" />
 			<?php
 					$query1 = "select friend_email_add from has_friends where email_add = '".$_SESSION['email']."'";
 					$statement1 = oci_parse($connection, $query1);

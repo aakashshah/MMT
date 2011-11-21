@@ -1,11 +1,15 @@
-function whoPaidFunction(emailId)
+function whoPaidFunction(emailId,divName)
 {
-	document.getElementById("whoPaid").innerHTML = document.getElementById("whoPaid").innerHTML + emailId + "<input type = 'text' name = 'paidAmt[]' value = 0 ></input>   <input type='hidden' name = 'paidEmailIds[]' value = " + emailId + "> </input> <br>" ;
+          var newdiv = document.createElement('div');
+          newdiv.innerHTML = emailId +"&nbsp; &nbsp;  <input type = 'text' name = 'paidAmt[]'  value = 0></input>   <input type='hidden' name = 'paidEmailIds[]' value = " + emailId + "> </input> <br>" ;
+          document.getElementById(divName).appendChild(newdiv);
 }
 
-function whoParticipatedFunction(emailId)
+function whoParticipatedFunction(emailId,divName)
 {
-	document.getElementById("whoParticipated").innerHTML = document.getElementById("whoParticipated").innerHTML + emailId + "&nbsp;\
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \
+        var newdiv = document.createElement('div');
+        newdiv.innerHTML = emailId +"&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \
 	Share: <input type = 'text' name = 'sharedAmt[]' value = 0 ></input> <br><input type='hidden' name = 'shareEmailIds[]' value = " + emailId + "> </input> " ;
+        document.getElementById(divName).appendChild(newdiv);
+
 }

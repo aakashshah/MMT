@@ -16,9 +16,30 @@ a {
 .bar {
   text-decoration: none }
   
-table, tr, td {
-	
+html, body {
+      margin:10;
+      padding:0;
+      height:100%;
+      border:none
+}
+
+td {
+	padding: 10px;
+}
+  
+.transactions {
 	border:1px solid black;
 	border-collapse: collapse;
 	padding: 5px;
+}
+
+.mainButton {
+	color: #FFFFFF;
+	font-weight: bold;
+	background-color: #DD4B39;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #BDBDBD;
+	width: 120px;
+	height: 35px;
 }

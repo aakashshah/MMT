@@ -5,6 +5,7 @@
 <html>
 <head>
 <title>Welcome to MMT</title>
+<link rel="stylesheet" href="mmt.css">
 </head>
 <body>
 
@@ -57,7 +58,7 @@
 ?>
 
 <form name = 'loginform' action = 'index.php' method = 'post'>
-	<table align = 'center' border = '0'>
+	<table align = 'center'>
 		<tr>
 			<td>Username:</td><td><input name = 'username' type = 'text' /></td>
 		</tr>
@@ -66,8 +67,13 @@
 		</tr>
 		<tr>
 			<td align = 'center' colspan = '2'>
-				<input name = 'login' type = 'submit' value = 'Sign In' />
-				<input name = 'signup' type = 'submit' value = 'Sign Up' />
+				<input class = 'mainButton' name = 'login' type = 'submit' value = 'Sign In' />
+			</td>
+		</tr>
+		<tr>
+			<td align = 'center' colspan = '2'>
+				<br /><br /><br />Do not have any account yet?<br />
+				<input class = 'mainButton' name = 'signup' type = 'submit' value = 'Sign Up Now!' />
 			</td>
 		</tr>
 	</table>

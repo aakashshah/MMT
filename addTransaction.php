@@ -62,8 +62,10 @@
 	
 		//update transaction table
 		// trans_id, cat_id, type, txn_desc, tot_amt, date
-		$type = "l"; //update transaction type later, TODO
-		$txn_desc = "txn desc" ; //update txn desc later , TODO
+
+		//transaction type is always EX: expense for this page.
+		$type = "EX";  
+		$txn_desc = $_POST['trans_desc'] ; 
 		$txn_amt = (int)$_POST['trans_amt'];
 		$txn_date = $_POST['trans_date'];
 
@@ -203,6 +205,7 @@
 		
 			Date:<input name = 'trans_date' type = 'date' />
 			<br>Total Amount:<input name = 'trans_amt' type = 'integer' />
+			<br>Description:<input name = 'trans_desc' type = 'text'/>
 			<br>Category:<select name = 'category'  />
 			<?php
 				while(1)

@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="mmt.css">
 
-<table width="100%" border="0" cellpadding="8" cellspacing="0" bgcolor="#2D2D2D">
+<table width="100%" border="0" cellspacing="0" bgcolor="#2D2D2D">
 	<tr>
 		<td>
 		<a class = "bar" href = "home.php">Home</a>

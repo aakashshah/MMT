@@ -7,5 +7,5 @@ function whoParticipatedFunction(emailId)
 {
 	document.getElementById("whoParticipated").innerHTML = document.getElementById("whoParticipated").innerHTML + emailId + "&nbsp;\
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \
-	Share: <input type = 'text' name = 'participatedAmt[]' value = 0 ></input> <br><input type='hidden' name = 'shareEmailIds[]' value = " + emailId + "> </input> " ;
+	Share: <input type = 'text' name = 'sharedAmt[]' value = 0 ></input> <br><input type='hidden' name = 'shareEmailIds[]' value = " + emailId + "> </input> " ;
 }

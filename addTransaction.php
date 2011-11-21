@@ -36,50 +36,7 @@
         }	
         if(isset($_POST['submit']))
 	{   
-		$paidAmt = $_POST['paidAmt'];
-		$paidEmailIds = $_POST['paidEmailIds'];
-
-		$sharedAmt = $_POST['sharedAmt'];
-		$shareEmailIds = $_POST['shareEmailIds'];
-			
-		//$finalAmt 
-		//$finalEmailIds
-		$k = 0;//index for final array
-		//find what paidEmailIds are there in shareEmailIds and calculate finalEmailIds which are there or not there in shareEmailIds
-		for($i = 0 ; $i<count($paidEmailIds); $i++)
-		{
-			$key = array_search($paidEmailIds[$i], $shareEmailIds);
-			if($key === false) //not found
-			{	
-				$finalEmailIds[$k] = $paidEmailids[$i];
-				$finalAmt[$k] = -($paidAmt[$i]);
-			}
-			else //found
-			{
-				$finalEmailIds[$k] = $shareEmailIds[$key];
-				$finalAmt[$k] = $sharedAmt[$key] - $paidEmailIds[$key];		
-
-			}
-			$k = $k + 1;			
-		}
-		//find which shareEmailIds are not there in paidEmailIds and calculate finalEmailIds for them.
-		for($i = 0 ; $i<count($shareEmailIds); $i++)
-		{
-			$key = array_search($shareEmailIds[$i], $paidEmailIds);
-			if($key === false) //not found
-			{	
-				$finalEmailIds[$k] = $shareEmailids[$i];
-				$finalAmt[$k] = $paidAmt[$i];
-			}
-			$k = $k + 1;
-		}
-
-		//sort finalAmt[] along with finalEmailIds
-		array_multisort($finalAmt,$finalEmailIds);
-		print_r($finalAmt);
-
-/*-	
-	
+		//find trans_id and cat_id
 		$queryMaxTxnId = "select MAX(trans_id) as m from transaction";
 		$statement = oci_parse($connection, $queryMaxTxnId);
 		if (!oci_execute($statement))
@@ -102,7 +59,7 @@
 
 		$catRow = oci_fetch_object($statementCategory);
 		$catId = $catRow->CAT_ID;
-		
+	
 		//update transaction table
 		// trans_id, cat_id, type, txn_desc, tot_amt, date
 		$type = "l"; //update transaction type later, TODO
@@ -119,6 +76,99 @@
 			die("TRANSACTION NOT  added!");
 		}
 
+
+		$paidAmt = $_POST['paidAmt'];
+		$paidEmailIds = $_POST['paidEmailIds'];
+		echo "paid:";
+		print_r( $paidEmailIds);
+		echo "<br>";	
+		print_r($paidAmt);		
+		echo "<br>";	
+		$sharedAmt = $_POST['sharedAmt'];
+		$shareEmailIds = $_POST['shareEmailIds'];
+		echo "shared";
+		print_r($sharedAmt);
+		echo "<br>";	
+		print_r($shareEmailIds);
+		$k = 0;//index for final array
+		//find what paidEmailIds are there in shareEmailIds and calculate finalEmailIds which are there or not there in shareEmailIds
+		for($i = 0 ; $i<count($paidEmailIds); $i++)
+		{
+			$key = array_search($paidEmailIds[$i], $shareEmailIds);
+			echo "<br>".$key.$paidEmailIds[$i]."<br>";
+			if($key === false) //not found
+			{	
+				$finalEmailIds[$k] = $paidEmailIds[$i];
+				$finalAmt[$k] = -($paidAmt[$i]);
+			}
+			else //found
+			{
+				$finalEmailIds[$k] = $paidEmailIds[$k];
+				$finalAmt[$k] = $sharedAmt[$key] - $paidAmt[$i];		
+
+			}
+			$k = $k + 1;			
+		}
+		echo "<br>";	
+		print_r($finalAmt);
+		echo "<br>";	
+		print_r($finalEmailIds);
+		echo "<br>";	
+		//find which shareEmailIds are not there in paidEmailIds and calculate finalEmailIds for them.
+		for($i = 0 ; $i<count($shareEmailIds); $i++)
+		{
+			$key = array_search($shareEmailIds[$i], $paidEmailIds);
+			if($key === false) //not found
+			{	
+				$finalEmailIds[$k] = $shareEmailIds[$i];
+				$finalAmt[$k] = $sharedAmt[$i];
+			}
+			$k = $k + 1;
+		}
+
+		//sort finalAmt[] along with finalEmailIds
+		array_multisort($finalAmt,$finalEmailIds);
+		echo "<br>After sorting:<br>";
+		print_r($finalAmt);
+		echo "<br>";	
+		print_r($finalEmailIds);
+		echo "<br>";	
+		//cache amounts to be paid and insert into participates table
+		$i = 0;
+		$j = count($finalAmt)-1;
+		while($i < $j)
+		{
+			if( -($finalAmt[$i]) <= $finalAmt[$j])
+			{	
+				//email_id,with_username,trans_id,cat_id,with_amt
+				$query = "insert into participates values ('".$finalEmailIds[$i]."','".$finalEmailIds[$j]."',$txnId ,$catId  , -($finalAmt[$i]))";
+				$statement = oci_parse($connection, $query);
+				if (!oci_execute($statement))
+				{
+					echo $query;
+					die("insertion into participates table failed!");
+				}
+				$finalAmt[$j] += $finalAmt[$i];
+				$finalAmt[$i] = 0;
+				++$i;
+			}
+			else
+			{
+				$query = "insert into participates values ('".$finalEmailIds[$i]."','".$finalEmailIds[$j]."',$txnId, $catId, $finalAmt[$j])";
+				$statement = oci_parse($connection, $query);
+				if (!oci_execute($statement))
+				{
+					echo $query;
+					die("insertion into participates table failed!");
+				}
+				$finalAmt[$i] += $finalAmt[$j];
+				$finalAmt[$j] = 0;
+				--$j;
+			}
+		}
+
+	
+	
 		//update SHARES table
 		//email_add, trans_id, cat_id , shared_amt
 		for($i=0; $i < count($sharedAmt); $i++)
@@ -132,8 +182,7 @@
 				die("TRANSACTION NOT  added!");
 			}
 		}
-*/
-		header("Location:home.php");
+//		header("Location:home.php");
 	}
 ?>
 
@@ -163,9 +212,6 @@
 
                         <br><br><b>Who Paid:</b><br>
 			<?php
-			echo $_SESSION['email'] ;
-			echo "<input type='hidden' value ='".$_SESSION['email'] ."' name ='paidEmailIds[]' > </input>";
-			echo "<input type='text' value = 0 name = 'paidAmt[]'> </input>";
 			echo "<div id = 'whoPaid'></div>";
 			echo "Add Someone: ";
 			echo "<select name = 'nameWhoPaid' onChange='whoPaidFunction(this.value)'  />";

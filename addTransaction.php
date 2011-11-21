@@ -79,17 +79,21 @@
 
 		$paidAmt = $_POST['paidAmt'];
 		$paidEmailIds = $_POST['paidEmailIds'];
+/*
 		echo "paid:";
 		print_r( $paidEmailIds);
 		echo "<br>";	
 		print_r($paidAmt);		
 		echo "<br>";	
+*/
 		$sharedAmt = $_POST['sharedAmt'];
 		$shareEmailIds = $_POST['shareEmailIds'];
+/*
 		echo "shared";
 		print_r($sharedAmt);
 		echo "<br>";	
 		print_r($shareEmailIds);
+*/
 		$k = 0;//index for final array
 		//find what paidEmailIds are there in shareEmailIds and calculate finalEmailIds which are there or not there in shareEmailIds
 		for($i = 0 ; $i<count($paidEmailIds); $i++)
@@ -109,11 +113,13 @@
 			}
 			$k = $k + 1;			
 		}
+/*
 		echo "<br>";	
 		print_r($finalAmt);
 		echo "<br>";	
 		print_r($finalEmailIds);
 		echo "<br>";	
+*/
 		//find which shareEmailIds are not there in paidEmailIds and calculate finalEmailIds for them.
 		for($i = 0 ; $i<count($shareEmailIds); $i++)
 		{
@@ -128,11 +134,13 @@
 
 		//sort finalAmt[] along with finalEmailIds
 		array_multisort($finalAmt,$finalEmailIds);
+/*
 		echo "<br>After sorting:<br>";
 		print_r($finalAmt);
 		echo "<br>";	
 		print_r($finalEmailIds);
 		echo "<br>";	
+*/
 		//cache amounts to be paid and insert into participates table
 		$i = 0;
 		$j = count($finalAmt)-1;
@@ -182,7 +190,7 @@
 				die("TRANSACTION NOT  added!");
 			}
 		}
-//		header("Location:home.php");
+		header("Location:home.php");
 	}
 ?>
 

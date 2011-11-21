@@ -37,11 +37,49 @@
         if(isset($_POST['submit']))
 	{   
 		$paidAmt = $_POST['paidAmt'];
-		$emailIds = $_POST['paidEmailIds'];
+		$paidEmailIds = $_POST['paidEmailIds'];
 
-		$participatedAmt = $_POST['participatedAmt'];
+		$sharedAmt = $_POST['sharedAmt'];
 		$shareEmailIds = $_POST['shareEmailIds'];
-		
+			
+		//$finalAmt 
+		//$finalEmailIds
+		$k = 0;//index for final array
+		//find what paidEmailIds are there in shareEmailIds and calculate finalEmailIds which are there or not there in shareEmailIds
+		for($i = 0 ; $i<count($paidEmailIds); $i++)
+		{
+			$key = array_search($paidEmailIds[$i], $shareEmailIds);
+			if($key === false) //not found
+			{	
+				$finalEmailIds[$k] = $paidEmailids[$i];
+				$finalAmt[$k] = -($paidAmt[$i]);
+			}
+			else //found
+			{
+				$finalEmailIds[$k] = $shareEmailIds[$key];
+				$finalAmt[$k] = $sharedAmt[$key] - $paidEmailIds[$key];		
+
+			}
+			$k = $k + 1;			
+		}
+		//find which shareEmailIds are not there in paidEmailIds and calculate finalEmailIds for them.
+		for($i = 0 ; $i<count($shareEmailIds); $i++)
+		{
+			$key = array_search($shareEmailIds[$i], $paidEmailIds);
+			if($key === false) //not found
+			{	
+				$finalEmailIds[$k] = $shareEmailids[$i];
+				$finalAmt[$k] = $paidAmt[$i];
+			}
+			$k = $k + 1;
+		}
+
+		//sort finalAmt[] along with finalEmailIds
+		array_multisort($finalAmt,$finalEmailIds);
+		print_r($finalAmt);
+
+/*-	
+	
 		$queryMaxTxnId = "select MAX(trans_id) as m from transaction";
 		$statement = oci_parse($connection, $queryMaxTxnId);
 		if (!oci_execute($statement))
@@ -83,9 +121,9 @@
 
 		//update SHARES table
 		//email_add, trans_id, cat_id , shared_amt
-		for($i=0; $i < count($participatedAmt); $i++)
+		for($i=0; $i < count($sharedAmt); $i++)
 		{
-			$query = "insert into shares values ('$shareEmailIds[$i]', $txnId, $catId,$participatedAmt[$i] )";
+			$query = "insert into shares values ('$shareEmailIds[$i]', $txnId, $catId,$sharedAmt[$i] )";
 			$statement = oci_parse($connection, $query);
 
 			if (!oci_execute($statement))
@@ -94,6 +132,7 @@
 				die("TRANSACTION NOT  added!");
 			}
 		}
+*/
 		header("Location:home.php");
 	}
 ?>
@@ -129,7 +168,7 @@
 			echo "<input type='text' value = 0 name = 'paidAmt[]'> </input>";
 			echo "<div id = 'whoPaid'></div>";
 			echo "Add Someone: ";
-			echo "<select name = 'nameWhoPaid' onClick='whoPaidFunction(this.value)'  />";
+			echo "<select name = 'nameWhoPaid' onChange='whoPaidFunction(this.value)'  />";
 			?>
 			<br>
 			
@@ -161,7 +200,7 @@
 	
                         <br><br><b>Who participated:</b><br>
 			<div id = 'whoParticipated'></div> 
-			Add Someone:<select name = 'who_participated' onClick='whoParticipatedFunction(this.value)' />
+			Add Someone:<select name = 'who_participated' onChange='whoParticipatedFunction(this.value)' />
 			<?php
 					$query1 = "select friend_email_add from has_friends where email_add = '".$_SESSION['email']."'";
 					$statement1 = oci_parse($connection, $query1);

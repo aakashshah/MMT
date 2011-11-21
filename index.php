@@ -5,7 +5,8 @@
 <html>
 <head>
 <title>Welcome to MMT</title>
-<link rel="stylesheet" href="mmt.css">
+<link rel = "stylesheet" href = "mmt.css">
+<script type = "text/javascript" src = "js/validations.js"></script>
 </head>
 <body>
 
@@ -57,7 +58,7 @@
 	}
 ?>
 
-<form name = 'loginform' action = 'index.php' method = 'post'>
+<form name = 'loginform' action = 'index.php' onsubmit = 'return validateSignIn()' method = 'post'>
 	<table align = 'center'>
 		<tr>
 			<td>Username:</td><td><input name = 'username' type = 'text' /></td>
@@ -71,8 +72,10 @@
 			</td>
 		</tr>
 		<tr>
+			<td align = 'center' colspan = '2'>Do not have any account yet?</td>
+		</tr>
+		<tr>
 			<td align = 'center' colspan = '2'>
-				<br /><br /><br />Do not have any account yet?<br />
 				<input class = 'mainButton' name = 'signup' type = 'submit' value = 'Sign Up Now!' />
 			</td>
 		</tr>

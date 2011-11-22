@@ -53,6 +53,16 @@
 	?>
 	</table>
 	
-	<img src="http://chart.apis.google.com/chart?chs=700x300&cht=p3&chd=t:<?=$amtSet?>&chl=<?=$amtLabelSet?>&chdl=<?=$nameSet?>&chdlp=b&chtt=Your Breakup" alt="Title" />
+	<?php
+	/* If there is nothing to display, skip displaying the chart */
+	if (0 == $firstRow)
+	{
+		echo "<img src='http://chart.apis.google.com/chart?chs=700x300&cht=p3&chd=t:".$amtSet."&chl=".$amtLabelSet."&chdl=".$nameSet."&chdlp=b&chtt=Amount Breakup' alt='Amount Breakup' />";
+	}
+	else
+	{
+		echo "<center>No transactions found!</center>";
+	}
+	?>
 </body>
 </html>

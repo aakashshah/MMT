@@ -5,6 +5,8 @@
 <html>
 <head>
 <title>Sign Up - MMT</title>
+<link rel = "stylesheet" href = "mmt.css">
+<script type = "text/javascript" src = "js/validations.js"></script>
 </head>
 <body>
 
@@ -65,7 +67,7 @@
 	}
 ?>
 
-<form name = 'signupform' action = 'signUp.php' method = 'post'>
+<form name = 'signupform' action = 'signUp.php'  onsubmit = 'return validateSignUp()' method = 'post'>
 	<table align = 'center' border = '0'>
 		<tr>
 			<td>Username (Email Address):</td><td><input name = 'username' type = 'text' /></td>
@@ -90,10 +92,10 @@
 		</tr>
 		<tr align = 'center'>
 			<td>
-				<input name = 'signupnow' type = 'submit' value = 'Sign Up' />
+				<input class = 'mainButton' name = 'signupnow' type = 'submit' value = 'Sign Up' />
 			</td>
 			<td>
-				<input type = 'button' value = 'Back' onclick = 'history.go(-1)'>
+				<input class = 'normalButton' type = 'button' value = 'Back' onclick = 'history.go(-1)'>
 			</td>
 		</tr>
 	</table>

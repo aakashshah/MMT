@@ -51,3 +51,14 @@ td {
 	width: 120px;
 	height: 35px;
 }
+
+.normalButton {
+	color: #000000;
+	font-weight: bold;
+	background-color: #BDBDBD;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #DD4B39;
+	width: 120px;
+	height: 35px;
+}

@@ -48,7 +48,10 @@
 			<a class = "bar" href='collect.php'>Collect&nbsp;$<?php echo $collect; ?></a>
 		</td>
 		<td width="100%">
-			<div class = "bar">Search&nbsp;<input class = "searchBar" type='text'/></div>
+			<form name = "searchform" action = "search.php" method = "get">
+			<input class = "searchBar" name = "searchString" type = "text" value = "Search..." onfocus="this.value = '';"/>
+			<input type = "submit" style="visibility:hidden" />
+			</form>
 		</td>
 		<td>
 		<a class = "bar" href = "profileSettings.php" title = "<?php echo $_SESSION['email'] ?>">

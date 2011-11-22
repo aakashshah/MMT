@@ -17,66 +17,130 @@ if (!isset($_SESSION['email']))
 	{
 		die("Failed to include mainbar!");
 	}
-
-//$count = strlen($_POST['cat_desc']);
-
-$query = "select cat_desc from Category where cat_desc like'%".$_POST['search']."%'";
-$statement = oci_parse($connection, $query);
-oci_execute($statement);
-$row = oci_fetch_object($statement);
-
-		if (!$row)
-		{
-			echo $row;
-			echo "\n";
-		}
-
-$query = "select  type, txn_desc, tot_amt, date from Transaction where txn_desc like'%".$_POST['search']."%'";
-$statement = oci_parse($connection, $query);
-oci_execute($statement);
-$row = oci_fetch_object($statement);
-
-		if (!$row)
-		{
-			echo $row;
-			echo "\n";
-		}
-		
-$query = "select ph_no, name, email_add, monthly_budget from User where email_add = (select friend_email_add from has_friends where email_add = ".$_SESSION['email']." and friend_email_add like '%".$_POST['search']."%')";
-$statement = oci_parse($connection, $query);
-oci_execute($statement);
-$row = oci_fetch_object($statement);
-
-		if (!$row)
-		{
-			echo $row;
-			echo "\n";
-		}
 	
-		
-$grpnames = "select group_name from UserGroup where group_name like '%".$_POST['search']."%'" ;
-$statement = oci_parse($connection, $query);
-oci_execute($statement);
-$row = oci_fetch_object($statement);
-
-		if (!$row)
+	?>
+	
+	<?php
+		$searchString = $_GET['searchString'];
+	?>
+	
+	<br /><br />
+	<table border = "0">
+	<tr>
+		<td>Your search for '<i><?=$searchString?></i>' returned the following results</td>
+	</tr>
+	</table>
+	
+	<table class = "transactions">
+	<?php
+	$query = "select cat_desc from Category where cat_desc like '%".$searchString."%'";
+	$statement = oci_parse($connection, $query);
+	if (!oci_execute($statement))
+	{
+		die($query);
+	}
+	
+	$totalRows = 0;
+	echo "<tr><td class = 'transactions'>Category Description</td></tr>";
+	while ($row = oci_fetch_object($statement))
+	{
+		$totalRows = $totalRows + 1;		
+		echo "<tr><td class = 'transactions'>".$row->CAT_DESC."</td></tr>";
+	}
+	
+	echo "<tr><td class = 'transactions'><i>Total Rows: ".$totalRows."</i></td></tr>";
+	?>
+	</table>
+	<br />
+	<table class = "transactions">
+	<?php
+	$totalRows = 0;
+	echo "<tr><td class = 'transactions' colspan = '3'>Transactions</td></tr>";
+	$query = "select txn_desc, tot_amt, txn_date from transaction where txn_desc like '%".$searchString."%'";
+	$statement = oci_parse($connection, $query);
+	if (!oci_execute($statement))
+	{
+		die($query);
+	}
+	while($row = oci_fetch_object($statement))
+	{
+		$totalRows = $totalRows + 1;
+		/* Add header */
+		if (1 == $totalRows)
 		{
-			echo $row;
-			echo "\n";
+			echo "<tr>";
+			echo "<td class = 'transactions'>Transaction Description</td>";
+			echo "<td class = 'transactions'>Total Amount</td>";
+			echo "<td class = 'transactions'>Transaction Date</td>";
+			echo "</tr>";
 		}
-?>
-
+		echo "<tr>";
+		echo "<td class = 'transactions'>".$row->TXN_DESC."</td>";
+		echo "<td class = 'transactions'>".$row->TOT_AMT."</td>";
+		echo "<td class = 'transactions'>".$row->TXN_DATE."</td>";
+		echo "</tr>";
+	}
+	echo "<tr><td class = 'transactions' colspan = '3'><i>Total Rows: ".$totalRows."<i></td></tr>";
+	?>
+	</table>
+	<br />
+	<table class = "transactions">
+	<?php
+	$totalRows = 0;
+	echo "<tr><td class = 'transactions' colspan = '3'>Users</td></tr>";
+	
+	$query = "select ph_no, name, email_add from users where (name like '%".$searchString."%'  or email_add like '%".$searchString."%' ) and email_add in (select friend_email_add from users, has_friends where users.email_add = has_friends.email_add and users.email_add = '".$_SESSION['email']."')";
+	$statement = oci_parse($connection, $query);
+	if (!oci_execute($statement))
+	{
+		die($query);
+	}
+	while ($row = oci_fetch_object($statement))
+	{
+		$totalRows = $totalRows + 1;
+		/* Add header */
+		if (1 == $totalRows)
+		{
+			echo "<tr>";
+			echo "<td class = 'transactions'>Email Address</td>";
+			echo "<td class = 'transactions'>Name</td>";
+			echo "<td class = 'transactions'>Phone Number</td>";
+			echo "</tr>";
+		}
+		echo "<tr>";
+		echo "<td class = 'transactions'>".$row->EMAIL_ADD."</td>";
+		echo "<td class = 'transactions'>".$row->NAME."</td>";
+		echo "<td class = 'transactions'>".$row->PH_NO."</td>";
+		echo "</tr>";
+	}
+	echo "<tr><td class = 'transactions' colspan = '3'><i>Total Rows: ".$totalRows."</i></td></tr>";
+	?>
+	</table>
+	<br />
+	
+	<table class = "transactions">
+	<?php
+	$totalRows = 0;
+	echo "<tr><td class = 'transactions'>User Group</td></tr>";
+	
+	$query = "select group_name from usergroup where group_name like '%".$searchString."%'" ;
+	$statement = oci_parse($connection, $query);
+	if (!oci_execute($statement))
+	{
+		die($query);
+	}
+	while($row = oci_fetch_object($statement))
+	{
+		$totalRows = $totalRows + 1;		
+		echo "<tr><td class = 'transactions'>".$row->GROUP_NAME."</td></tr>";
+	}
+	echo "<tr><td class = 'transactions'><i>Total Rows: ".$totalRows."</i></td></tr>";
+	?>
+	</table>
 
 
 <html>
-<head><title>SEARCH</title></head>
+<head><title>Search Results - MMT</title></head>
 <body>
-
-<form action="search.php" method="post">
-
-Search: <input type="text" name="search" />
-
-</form>
-
 </body>
 </html>

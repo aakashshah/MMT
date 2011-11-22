@@ -5,6 +5,8 @@
 <html>
 <head>
 <title>Profile Settings - MMT</title>
+<link rel = "stylesheet" href = "mmt.css">
+<script type = "text/javascript" src = "js/validations.js"></script>
 </head>
 <body>
 
@@ -97,6 +99,8 @@
 	}
 ?>
 
+<br /><br />
+
 <form name = 'changeSettings' action = 'profileSettings.php' method = 'post'>
 	<table align = 'center' border = '0'>
 		<tr>
@@ -122,17 +126,17 @@
 		</tr>
 		<tr align = 'center'>
 			<td>
-				<input name = 'changeNow' type = 'submit' value = 'Update' />
+				<input class = 'mainButton' name = 'changeNow' type = 'submit' value = 'Update' />
 			</td>
 			<td>
-				<input type = 'button' value = 'Back' onclick = 'history.go(-1)'>
+				<input class = 'normalButton' type = 'button' value = 'Back' onclick = 'history.go(-1)'>
 			</td>
 		</tr>
 		<tr>
 		</tr>
 		<tr>
 			<td align = 'center' colspan = '2'>
-				<input name = 'deleteAccount' type = 'submit' value = 'Delete Account' />
+				<input class = 'mainButton' name = 'deleteAccount' type = 'submit' value = 'Delete Account' />
 			</td>
 		</tr>
 	</table>

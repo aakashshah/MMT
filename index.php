@@ -17,6 +17,10 @@
 </td>
 <td width = "100%">
 <?php
+	if (isset($_SESSION['email']))
+	{
+		header("Location:home.php");
+	}
 	// process only if the login button is clicked
 	if(isset($_POST['login']))
 	{
@@ -71,6 +75,8 @@
 				<input class = 'mainButton' name = 'login' type = 'submit' value = 'Sign In' />
 			</td>
 		</tr>
+</form>
+<form name = 'signUpform' action = 'index.php' method = 'post'>
 		<tr>
 			<td align = 'center' colspan = '2'>Do not have any account yet?</td>
 		</tr>

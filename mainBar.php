@@ -48,6 +48,7 @@
 			<a class = "bar" href='collect.php'>Collect&nbsp;$<?php echo $collect; ?></a>
 		</td>
 		<td width="100%">
+			<div class = "bar">Search&nbsp;<input class = "searchBar" type='text'/></div>
 		</td>
 		<td>
 		<a class = "bar" href = "profileSettings.php" title = "<?php echo $_SESSION['email'] ?>">

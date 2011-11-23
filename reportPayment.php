@@ -32,7 +32,6 @@
 <b>With whom are you settling the payment?</b>
 <?php
 	$queryFriend = "select friend_email_add from has_friends where email_add = '".$_SESSION['email']."'";
-	echo $queryFriend;
 	$statementFriend = oci_parse($connection, $queryFriend);
 	if(!oci_execute($statementFriend))
 	{
@@ -40,8 +39,7 @@
 		die("Failed to execute query!");
 	}
 	echo "<div id = 'whoSettled'></div>";
-	echo '<select name = "nameWhoSettled" onChange="whoSettledFunction(this.value,\'whoSettled\')"  />';
-	echo "<option value = '".$_SESSION['email']."'> ".$_SESSION['email']."</option>";
+	echo '<select id = "nameWhoSettled" >';
 	while(1)
 	{
 		$row = oci_fetch_object($statementFriend);
@@ -57,12 +55,54 @@
 			die("Failed to execute subquery!");
 		}
 		$friendName = oci_fetch_object($subStatement);
-		echo "<option value = '".$row->FRIEND_EMAIL_ADD."'>".$friendName->NAME." (".$row->FRIEND_EMAIL_ADD.")</option>";
+		echo "<option value = '".$row->FRIEND_EMAIL_ADD."'>".$friendName->NAME." (".$row->FRIEND_EMAIL_ADD.")</option><br/>";
 	}
-
-
+	echo "</select>";	
 ?>
+	<br /><br />
+	<b>Who Paid Whom: </b>
+	<br />
 
 
+        <input type="radio" name="payment" onclick="payment(0);" value = "madePayment" /> You made a Payment 
+        <br />
+        <input type="radio" name="payment" onclick="payment(1);" value = "receivedPayment" /> You received a Payment
+        <br />
+        <span id="update"></span>
+        <script type="text/javascript">
+            function payment(received){
+		    var selected = document.getElementById("nameWhoSettled");
+		    var userToSettleWith = selected.options[selected.selectedIndex].value;
+
+		    //if received 
+		    if(received == 1)
+		    {
+		    document.getElementById("update").innerHTML = " \
+		    <br /><b>Description:</b>You received from " + userToSettleWith  +" \
+		    <br /><b>Person making payment:</b> "+userToSettleWith+ "\
+		    <br /><b>Person receiving payment:</b><? echo $_SESSION['email']; ?> (you)"; 
+		    }
+		    //if paid
+		    else if(received == 0)
+		    {
+			    document.getElementById("update").innerHTML = " \
+			    <br /><b>Description:</b>You paid " + userToSettleWith +" \
+			    <br /><b>Person making payment:</b> <?php echo $_SESSION['email']; ?> (you)\
+			    <br /><b>Person receiving payment:</b> "+ userToSettleWith  ;
+		    }	
+
+		    document.getElementById("update").innerHTML += " \
+		    <br /><b>Total amount:</b><input type= 'text' name = 'paymentAmt' /> USD $  \
+		    <br /><b>Date:</b><input name = 'paymentDate' type = 'date' /> \
+		    <br /><b>Comment:</b><input type = 'text' name = 'paymentDescription' /> ";
+            }
+        </script>
+
+
+
+
+	 
+</body>
+</html>
 
 

@@ -29,6 +29,7 @@
 ?> 
 <html><head><title>Report a Payment</title></head>
 <body>
+<form name = "reportPayment" action = "reportPayment.php" method="POST">
 <b>With whom are you settling the payment?</b>
 <?php
 	$queryFriend = "select friend_email_add from has_friends where email_add = '".$_SESSION['email']."'";
@@ -39,7 +40,7 @@
 		die("Failed to execute query!");
 	}
 	echo "<div id = 'whoSettled'></div>";
-	echo '<select id = "nameWhoSettled" >';
+	echo '<select id = "nameWhoSettled" onClick = "payment(2)" >';
 	while(1)
 	{
 		$row = oci_fetch_object($statementFriend);
@@ -69,32 +70,42 @@
         <input type="radio" name="payment" onclick="payment(1);" value = "receivedPayment" /> You received a Payment
         <br />
         <span id="update"></span>
+	<br/><br/>
+	<input type="submit" name = "submit" value ="Submit">
+	<input type="submit" name = "back" value="Cancel">
+	</form>
         <script type="text/javascript">
             function payment(received){
 		    var selected = document.getElementById("nameWhoSettled");
 		    var userToSettleWith = selected.options[selected.selectedIndex].value;
+			
+		    //if user is changed
+	            if(received == 2) {
+			    document.getElementById("update").innerHTML = "";	
+			    return;
+		    }
 
 		    //if received 
 		    if(received == 1)
 		    {
-		    document.getElementById("update").innerHTML = " \
-		    <br /><b>Description:</b>You received from " + userToSettleWith  +" \
-		    <br /><b>Person making payment:</b> "+userToSettleWith+ "\
-		    <br /><b>Person receiving payment:</b><? echo $_SESSION['email']; ?> (you)"; 
+			    document.getElementById("update").innerHTML = " \
+			    <table border = 0><tr><td><b>Description:</b></td><td>You received from " + userToSettleWith  +"</td></tr> \
+			    <tr><td><b>Person making payment:</b></td><td> "+userToSettleWith+ "</td></tr>\
+			    <tr><td><b>Person receiving payment:</b></td><td><? echo $_SESSION['email']; ?> (you)</td></tr></table><br/><br/>"; 
 		    }
 		    //if paid
 		    else if(received == 0)
 		    {
 			    document.getElementById("update").innerHTML = " \
-			    <br /><b>Description:</b>You paid " + userToSettleWith +" \
-			    <br /><b>Person making payment:</b> <?php echo $_SESSION['email']; ?> (you)\
-			    <br /><b>Person receiving payment:</b> "+ userToSettleWith  ;
+			    <table border = 0><tr><td><b>Description:</b></td><td>You paid " + userToSettleWith +" </td></tr>\
+			    <tr><td><b>Person making payment:</b></td><td> <?php echo $_SESSION['email']; ?> (you)</td></tr>\
+			    <tr><td><b>Person receiving payment:</b></td><td> "+ userToSettleWith + "</td></tr></table><br/><br/>"  ;
 		    }	
 
 		    document.getElementById("update").innerHTML += " \
-		    <br /><b>Total amount:</b><input type= 'text' name = 'paymentAmt' /> USD $  \
-		    <br /><b>Date:</b><input name = 'paymentDate' type = 'date' /> \
-		    <br /><b>Comment:</b><input type = 'text' name = 'paymentDescription' /> ";
+		    <table border =0 ><tr><td><b>Total amount:</b></td><td><input type= 'text' name = 'paymentAmt' /> USD $  </td></tr>\
+		    <tr><td><b>Date:</b></td><td><input name = 'paymentDate' type = 'date' /> </td></tr> \
+		    <tr><td><b>Comment:</b></td><td><input type = 'text' name = 'paymentDescription' /></td></tr></table>";
             }
         </script>
 

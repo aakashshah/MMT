@@ -64,11 +64,10 @@
 	<br />
 
 
+        <input type="radio" id = "payment"  name="payment" onclick="payment(0);" value = "madePayment" /> You made a Payment 
+	<br/>
+        <input type="radio" id = "payment"  name="payment" onclick="payment(1);" value = "receivedPayment" /> You received a Payment
 
-        <input type="radio" name="payment" onclick="payment(0);" value = "madePayment" /> You made a Payment 
-        <br />
-        <input type="radio" name="payment" onclick="payment(1);" value = "receivedPayment" /> You received a Payment
-        <br />
 	<form name = "reportPayment" action = "reportPayment.php" method="post">
         <span id="update"></span>
 	<br/><br/>
@@ -83,6 +82,7 @@
 		    //if user is changed
 	            if(received == 2) {
 			    document.getElementById("update").innerHTML = "";	
+			    document.getElementById("payment").checked = false;	
 			    return;
 		    }
 

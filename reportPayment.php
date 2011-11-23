@@ -29,7 +29,6 @@
 ?> 
 <html><head><title>Report a Payment</title></head>
 <body>
-<form name = "reportPayment" action = "reportPayment.php" method="POST">
 <b>With whom are you settling the payment?</b>
 <?php
 	$queryFriend = "select friend_email_add from has_friends where email_add = '".$_SESSION['email']."'";
@@ -58,17 +57,19 @@
 		$friendName = oci_fetch_object($subStatement);
 		echo "<option value = '".$row->FRIEND_EMAIL_ADD."'>".$friendName->NAME." (".$row->FRIEND_EMAIL_ADD.")</option><br/>";
 	}
-	echo "</select>";	
+	echo "</select>";
 ?>
 	<br /><br />
 	<b>Who Paid Whom: </b>
 	<br />
 
 
+
         <input type="radio" name="payment" onclick="payment(0);" value = "madePayment" /> You made a Payment 
         <br />
         <input type="radio" name="payment" onclick="payment(1);" value = "receivedPayment" /> You received a Payment
         <br />
+	<form name = "reportPayment" action = "reportPayment.php" method="post">
         <span id="update"></span>
 	<br/><br/>
 	<input type="submit" name = "submit" value ="Submit">

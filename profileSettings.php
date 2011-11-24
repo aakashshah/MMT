@@ -72,6 +72,7 @@
 		}
 		
 		$_SESSION['alias'] = $_POST['alias'];
+		$_SESSION['mbudget'] = $mbudget;
 
 		// after updating the values goto main page again
 		header("Location:home.php");
@@ -101,7 +102,7 @@
 
 <br /><br />
 
-<form name = 'changeSettings' action = 'profileSettings.php' method = 'post'>
+<form name = 'changeSettings' action = 'profileSettings.php' onsubmit = 'return validateProfileSettings()' method = 'post'>
 	<table align = 'center' border = '0'>
 		<tr>
 			<td>Username (Email Address):</td><td><b><?php echo $_SESSION['email']; ?></b></td>
@@ -119,7 +120,7 @@
 			<td>Bank Balance:</td><td><input name = 'bankbal' type = 'text' /></td>
 		</tr>
 		<tr>
-			<td>Monthly Budget:</td><td><input name = 'mbudget' type = 'text' /></td>
+			<td>Monthly Budget:</td><td><input name = 'mbudget' type = 'text' value="<?=$_SESSION['mbudget'];?>"/></td>
 		</tr>
 		<tr>
 			<td>Phone Number:</td><td><input name = 'phno' type = 'text' /></td>

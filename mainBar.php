@@ -54,6 +54,9 @@
 			</form>
 		</td>
 		<td>
+			<a class = "bar" href='profileSettings.php'>Monthly&nbsp;Budget:&nbsp$<?=$_SESSION['mbudget'];?></a>
+		</td>
+		<td>
 		<a class = "bar" href = "profileSettings.php" title = "<?php echo $_SESSION['email'] ?>">
 		<?php session_start();
 			echo ucfirst($_SESSION['alias']);

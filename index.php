@@ -33,7 +33,7 @@
 		$pwd = md5($_POST['password']);
 		$usrname = $_POST['username'];
 
-		$query = "select name from users where email_add = '".$usrname."' and password = '".$pwd."'";
+		$query = "select name, monthly_budget from users where email_add = '".$usrname."' and password = '".$pwd."'";
 		//echo $query;
 
 		// check for a valid username and password combination
@@ -53,6 +53,7 @@
 		{
 			$_SESSION['email'] = $usrname;
 			$_SESSION['alias'] = $row->NAME;
+			$_SESSION['mbudget'] = $row->MONTHLY_BUDGET;
 			header("Location:home.php");
 		}
 	}

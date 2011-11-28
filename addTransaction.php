@@ -23,8 +23,8 @@ function arraySearch(arr,val)
 	for (var i=0; i<arr.length; i++)
 	{
     		//document.write(arr[i]);
-	//	alert(arr[i]+" "+val);
-		if (arr[i] == val)
+		//alert(arr[i]+" "+val+i);
+		if (arr[i].toString() == val.toString())
 		{
 			//alert('Already Selected!!!');
 			return 1;

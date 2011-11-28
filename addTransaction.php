@@ -7,12 +7,12 @@ var paidarray = new Array();
 var count1=0;
 function whoPaidFunction(emailId,divName)
 {
-           if(arraySearch(paidarray,emailId)==0)
+           if(arraySearch(paidarray,emailId)==-1)
            {
                 paidarray[count1]=emailId;
                 count1++;
 	   var newdiv = document.createElement('div');
-          newdiv.innerHTML = emailId +"&nbsp; &nbsp;  <input type = 'text' name = 'paidAmt[]'  value = 0></input>   <input type='hidden' name = 'paidEmailIds[]' value = " + emailId + "> </input> <br>" ;
+          newdiv.innerHTML = emailId +"&nbsp; &nbsp;  <input type = 'text' name = 'paidAmt[]'  value = 0></input>   <input type='hidden' name = 'paidEmailIds[]' value = " + emailId + "> </input> " ;
           document.getElementById(divName).appendChild(newdiv);
 	   }
 }
@@ -20,17 +20,18 @@ function whoPaidFunction(emailId,divName)
 function arraySearch(arr,val)
 {
 	//document.write(arr);
-	for (var i=0; i<=arr.length; i++)
+	for (var i=0; i<arr.length; i++)
 	{
     		//document.write(arr[i]);
+	//	alert(arr[i]+" "+val);
 		if (arr[i] == val)
 		{
 			//alert('Already Selected!!!');
-			return i;
+			return 1;
 		}
 		//document.write("Not Found");
 	}
-	return 0;
+	return -1;
 }
 
 function whoParticipatedFunction(emailId,divName)
@@ -56,13 +57,13 @@ function whoParticipatedFunction(emailId,divName)
 					tempResponse=member1;
 					i++;
 					//document.write(shareEmailIds);
-					if(arraySearch(sharedarray,member)==0)
+					if(arraySearch(sharedarray,member)==-1)
 				        {	
 						sharedarray[count]=member;
 						count++;
 						//document.write(sharedarray[count]);	
 					newdiv.innerHTML = member+"&nbsp; \
-					Share: <input type = 'text' name = 'sharedAmt[]' value = 0 ></input> <br><input type='hidden' name = 'shareEmailIds[]' value = " + member + "> </input> " ;
+					Share: <input type = 'text' name = 'sharedAmt[]' value = 0 ></input> <input type='hidden' name = 'shareEmailIds[]' value = " + member + "> </input> " ;
 					 document.getElementById(divName).appendChild(newdiv);
 					}
 				}
@@ -73,12 +74,12 @@ function whoParticipatedFunction(emailId,divName)
         }
         else
 	{
-		if(arraySearch(sharedarray,emailId)==0)
+		if(arraySearch(sharedarray,emailId)==-1)
 		{
 			sharedarray[count]=emailId;
                          count++;
 		newdiv.innerHTML = emailId +"&nbsp; \
-	        Share: <input type = 'text' name = 'sharedAmt[]' value = 0 ></input> <br><input type='hidden' name = 'shareEmailIds[]' value = " + emailId + "> </input> " ;
+	        Share: <input type = 'text' name = 'sharedAmt[]' value = 0 ></input> <input type='hidden' name = 'shareEmailIds[]' value = " + emailId + "> </input>" ;
         	document.getElementById(divName).appendChild(newdiv);
 		}
 	}

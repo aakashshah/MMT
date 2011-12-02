@@ -139,9 +139,9 @@
 						$unUsedString = "";
 					}
 					
-					/* Colour used as royalblue */
-					echo "<td bgcolor='#99CCFF' width='".$monthPercentage."' align='right'>".$usedString."</td>";
-					echo "<td bgcolor='#A4C639' width='".(100 - $monthPercentage)."'>".$unUsedString."</td>";
+					/* Colour used as blue */
+					echo "<td bgcolor='#99CCFF' width='".$monthPercentage."%' align='right'>".$usedString."</td>";
+					echo "<td bgcolor='#A4C639' width='".(100 - $monthPercentage)."%'>".$unUsedString."</td>";
 					
 					/* Check if mail needs to be sent to the user */
 					if ($monthPercentage > 90)

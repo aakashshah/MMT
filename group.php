@@ -110,14 +110,20 @@
 <form name = 'groupform' action = 'group.php' method = 'post'>
 	<br />
 	<br />
-	Create a new group
-	Group Name: <input type="text" name="my_group_name" /><br />
-	<input name="group_name" type="submit" value="Add Group" />
-	
-	<br />
-	<br />
-	<br />
-	Add a friend to a group<br />
+	<table class = "transactions" border = "0" align = "center">
+	<tr>
+		<td class = "transactions">Choose one of the options below:</td>
+	</tr>
+	<tr><td bgcolor = '#A4C639'>Create a new group</td></tr>
+	<tr>
+	<td>
+	Group Name: <input type="text" name="my_group_name" />
+	<input class = "mainButton" name="group_name" type="submit" value="Create" />
+	</td>
+	</tr>
+	<tr>
+	<td bgcolor = '#A4C639'>
+	Add a friend to a group
 	<?php
 		$grpQuery = "select group_id, group_name from usergroup where group_owner = '".$_SESSION['email']."'";
 		$statement = oci_parse($connection, $grpQuery);
@@ -128,7 +134,11 @@
 		}
 		
 	?>
-	
+	</td>
+	</tr>
+	<tr>
+	<td>	
+	Friend <input type="text" name="add_friend_email" /> to
 	<!-- Show all groups to the user of which he is the owner -->
 	<select name = "to_group">
 	<?php
@@ -144,14 +154,15 @@
 		}
 	?>
 	</select>
-	<!-- Group Name: <input type="text" name="to_group" /></br /> -->
-	Members: <input type="text" name="add_friend_email" /></br />
-	<input name="group_friend" type="submit" value="Add Friend" />
-	
-	<br />
-	<br />
-	<br />
-	Modify Groups<br />
+	<input class="mainButton" name="group_friend" type="submit" value="Add" />
+	</td>
+	</tr>
+	<tr>
+	<td bgcolor = '#A4C639'>Delete a friend from a group</td>
+	</tr>
+	<tr>
+	<td>
+	Friend <input type="text" name="friend_delete_group" /> from 
 	<select name = "gname">
 	<?php
 		if (!oci_execute($statement))
@@ -173,9 +184,10 @@
 		}
 	?>
 	</select>
-	<!--Enter group name: <input type="text" name="gname" /><br /> -->
-	Enter friend name: <input type="text" name="friend_delete_group" /><br />
-	<input name = "delete_friend" type="submit" value="Delete Friend" />
+	<input class = "mainButton" name = "delete_friend" type="submit" value="Delete" />
+	</td>
+	</tr>
+	</table>
 </form>
 
 </body>

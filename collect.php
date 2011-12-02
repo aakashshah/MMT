@@ -19,7 +19,11 @@
 
 <body>
 	<br /></br >
-	<table class = "transactions">
+	<!-- A table with 2 columns, one figure and the other as details -->
+	<table align = "center" width = "100%">
+		<tr>
+			<td align = "center" valign = "top">
+			<table class = "transactions" align = "center">
 	<tr>
 	<?php
 		$firstRow = 1;
@@ -36,6 +40,12 @@
 
 		while ($row = oci_fetch_object($statement))
 		{
+			/* If the amount is 0 or negative, it should not be displayed */
+			if ($row->AMT <= 0)
+			{
+				continue;
+			}
+
 			if ($firstRow == 1)
 			{
 				echo "<tr><td class = 'transactions'>Friend</td><td class = 'transactions'>Amount</td></tr>";
@@ -56,8 +66,9 @@
 	?>
 	</tr>
 	</table>
-	
-	<?php
+			</td>
+			<td align = "center" valign = "top">
+			<?php
 	if (0 == $firstRow)
 	{
 		echo "<img src='http://chart.apis.google.com/chart?chs=700x300&cht=p3&chd=t:".$amtSet."&chl=".$amtLabelSet."&chdl=".$nameSet."&chdlp=b&chtt=Amount Breakup' alt='Amount Breakup' />";
@@ -67,5 +78,8 @@
 		echo "<center>No transactions found!</center>";
 	}
 	?>
+			</td>
+		</tr>
+	</table>
 </body>
 </html>

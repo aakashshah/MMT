@@ -31,6 +31,7 @@ if (!isset($_SESSION['email']))
 	</tr>
 	</table>
 	
+	<!----------------------- Display Categories ------------------------------>
 	<table class = "transactions">
 	<?php
 	$query = "select cat_desc from Category where cat_desc like '%".$searchString."%'";
@@ -52,11 +53,13 @@ if (!isset($_SESSION['email']))
 	?>
 	</table>
 	<br />
+	<!----------------------- Display Transactions ------------------------------>
 	<table class = "transactions">
 	<?php
 	$totalRows = 0;
 	echo "<tr><td class = 'transactions' colspan = '3'>Transactions</td></tr>";
-	$query = "select txn_desc, tot_amt, txn_date from transaction where txn_desc like '%".$searchString."%'";
+	//$query = "select txn_desc, tot_amt, txn_date from transaction where txn_desc like '%".$searchString."%'";
+	$query = "select txn_desc, tot_amt, txn_date from transaction t, participates p where p.trans_id = t.trans_id and p.email_add = '".$_SESSION['email']."' and txn_desc like '%".$searchString."%'";
 	$statement = oci_parse($connection, $query);
 	if (!oci_execute($statement))
 	{
@@ -84,6 +87,7 @@ if (!isset($_SESSION['email']))
 	?>
 	</table>
 	<br />
+	<!----------------------- Display Friends ------------------------------>
 	<table class = "transactions">
 	<?php
 	$totalRows = 0;
@@ -117,13 +121,14 @@ if (!isset($_SESSION['email']))
 	?>
 	</table>
 	<br />
-	
+	<!----------------------- Display Groups ------------------------------>
 	<table class = "transactions">
 	<?php
 	$totalRows = 0;
 	echo "<tr><td class = 'transactions'>User Group</td></tr>";
 	
-	$query = "select group_name from usergroup where group_name like '%".$searchString."%'" ;
+	//$query = "select group_name from usergroup where group_name like '%".$searchString."%'" ;
+	$query = "select group_name from usergroup u, belongs_to b where b.group_id = u.group_id and b.email_add = '".$_SESSION['email']."' and group_name like '%".$searchString."%'";
 	$statement = oci_parse($connection, $query);
 	if (!oci_execute($statement))
 	{

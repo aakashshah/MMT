@@ -49,21 +49,50 @@
 		{
 			$phno = $_POST['phno'];
 		}
-
-		$query = "insert into users values ('".$usrname."', '".$pwd."',
-			'".$_POST['name']."', ".$bankbal.", '".$phno."', ".$mbudget.")";
-		echo $query;
-
-		// Insert values into the table to store the user details
+		
+		/* Check if the user is already present in the database */
+		$query = "select monthly_budget from users where email_add = '".$usrname."'";
 		$stmt = oci_parse($connection, $query);
-
 		if (!oci_execute($stmt))
 		{
-			die("Failed to execute query");
+			die($query);
 		}
+		
+		$row = oci_fetch_object($stmt);
+		if (!$row)
+		{
+			$query = "insert into users values ('".$usrname."', '".$pwd."',
+				'".$_POST['name']."', ".$bankbal.", '".$phno."', ".$mbudget.")";
 
-		// after inserting the values goto main page again
-		header("Location:index.php");
+			// Insert values into the table to store the user details
+			$stmt = oci_parse($connection, $query);
+
+			if (!oci_execute($stmt))
+			{
+				die($query);
+			}
+			
+			// after inserting or updating the values goto main page again
+			header("Location:index.php");
+		}
+		else if ($row->MONTHLY_BUDGET == (-1))
+		{
+			$query = "update users set password = '".$pwd."', name = '".$_POST['name']."', bank_balance = ".$bankbal.", ph_no = '".$phno."', monthly_budget = ".$mbudget." where email_add = '".$usrname."'";
+			
+			$stmt = oci_parse($connection, $query);
+
+			if (!oci_execute($stmt))
+			{
+				die($query);
+			}
+			
+			// after inserting or updating the values goto main page again
+			header("Location:index.php");
+		}
+		else
+		{
+			echo "Username already taken. Please choose a different username!";
+		}
 	}
 ?>
 

@@ -70,9 +70,10 @@
 			{
 			?>
 			<td valign = "top">
-				<a href = "delUsers.php">Delete Users</a> <br />
+				<a href = "delUsers.php">Deactivate Users</a> <br />
 				<a href = "delTransactions.php">Delete Transactions</a> <br />
 				<a href = "delGroups.php">Delete Groups</a> <br />
+				<a href = "modCategories.php">Modify Categories</a> <br />
 			</td>
 			<?php
 			}

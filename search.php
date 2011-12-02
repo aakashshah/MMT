@@ -131,7 +131,7 @@ if (!isset($_SESSION['email']))
 	echo "<tr><td class = 'transactions' bgcolor = '#A4C639'>User Group</td></tr>";
 	
 	//$query = "select group_name from usergroup where group_name like '%".$searchString."%'" ;
-	$query = "select group_name from usergroup u, belongs_to b where b.group_id = u.group_id and b.email_add = '".$_SESSION['email']."' and group_name like '%".$searchString."%'";
+	$query = "select group_name from usergroup where group_owner = '".$_SESSION['email']."' and group_name like '%".$searchString."%'";
 	$statement = oci_parse($connection, $query);
 	if (!oci_execute($statement))
 	{

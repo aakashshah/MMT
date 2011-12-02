@@ -85,7 +85,8 @@
 			exit(1);
 		}
 		
-		$query = "delete from users where email_add = '".$_SESSION['email']."'";
+		//$query = "delete from users where email_add = '".$_SESSION['email']."'";
+		$query = "update users set monthly_budget = -1 where email_add = '".$_SESSION['email']."'";
 		
 		$stmt = oci_parse($connection, $query);
 
@@ -137,7 +138,7 @@
 		</tr>
 		<tr>
 			<td align = 'center' colspan = '2'>
-				<input class = 'mainButton' name = 'deleteAccount' type = 'submit' value = 'Delete Account' />
+				<input class = 'mainButton' name = 'deleteAccount' type = 'submit' value = 'Deactivate Me' />
 			</td>
 		</tr>
 	</table>

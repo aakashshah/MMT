@@ -33,7 +33,8 @@
 		$pwd = md5($_POST['password']);
 		$usrname = $_POST['username'];
 
-		$query = "select name, monthly_budget from users where email_add = '".$usrname."' and password = '".$pwd."'";
+		/* For a valid user, the monthly_budget should always be >= 0. if it is < 0, it means that the users has not joined MMT yet */
+		$query = "select name, monthly_budget from users where email_add = '".$usrname."' and password = '".$pwd."' and monthly_budget >= 0";
 		//echo $query;
 
 		// check for a valid username and password combination

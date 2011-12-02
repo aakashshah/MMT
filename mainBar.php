@@ -91,7 +91,7 @@
 <table border = "0" cellpadding = "0" cellspacing = "0" width = "100%">
 	<tr>
 		<?php
-			$budgetQuery = "select sum(shared_amt) as amt from shares s, transaction t where t.trans_id = s.trans_id and t.txn_date like '%".strtoupper(date('M-y'))."'";
+			$budgetQuery = "select sum(shared_amt) as amt from shares s, transaction t where t.trans_id = s.trans_id and s.email_add = '".$_SESSION['email']."' and t.txn_date like '%".strtoupper(date('M-y'))."'";
 			
 			/* If the query fails to execute, the expense is taken to be 0. from
 			database it will be updated later */

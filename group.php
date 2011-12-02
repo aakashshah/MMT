@@ -68,19 +68,6 @@
 	/***************     Deleting a friend from a group  *************************/
 	else if (isset($_POST['delete_friend']))
 	{
-		/*
-		$query = "select group_id from usergroup where group_owner = '".$_SESSION['email']."' and group_name = '".$_POST['gname']."'";
-		$statement = oci_parse($connection, $query);
-		if (!oci_execute($statement))
-		{
-			echo $query;
-			die ("Failed to execute query!");
-		}
-		
-		$row = oci_fetch_object($statement);
-		
-		$id = $row->GROUP_ID;
-		*/
 		$id = $_POST['gname'];
 		
 		$finalQuery = "delete from belongs_to where email_add = '".$_POST['friend_delete_group']."' and group_id = ".$id;
@@ -89,6 +76,27 @@
 		{
 			echo $finalQuery;
 			die("Friend cannot be deleted!");
+		}
+		
+		$newQuery = "select * from belongs_to where group_id = ".$id;
+		$newStatement = oci_parse($connection, $newQuery);
+		if (!oci_execute($newStatement))
+		{
+			echo $newQuery;
+			die("Query failed!");
+		}
+		
+		$row = oci_fetch_object($newStatement);
+	        if (!$row)
+	        {
+			$deleteQuery = "delete from usergroup where group_id = ".$id;
+			$delStatement = oci_parse($connection, $deleteQuery);
+			
+			if (!oci_execute($delStatement))
+			{
+				echo $deleteQuery;
+				die("Group cannot be deleted!");
+			}
 		}
 		
 		header("Location:home.php");

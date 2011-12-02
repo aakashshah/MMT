@@ -19,7 +19,14 @@
 		$whereClause = "";
 	}
 	
-	$query = "select name, txn_date, txn_desc, tot_amt, shared_amt from shares s, transaction t, users u where u.email_add = s.email_add and s.trans_id = t.trans_id".$whereClause." order by txn_date desc";
+	if (isset($_POST['date']))
+	{
+		$query = "select name, txn_date, txn_desc, tot_amt, shared_amt from shares s, transaction t, users u where u.email_add = s.email_add and t.txn_date between '".$_POST['start_date']."' and '".$_POST['end_date']."' and s.trans_id = t.trans_id".$whereClause." order by txn_date desc";
+	}
+	else
+	{
+		$query = "select name, txn_date, txn_desc, tot_amt, shared_amt from shares s, transaction t, users u where u.email_add = s.email_add and s.trans_id = t.trans_id".$whereClause." order by txn_date desc";
+	}
 
 	$statement = oci_parse($connection, $query);
 	if (!oci_execute($statement))
@@ -32,6 +39,16 @@
 ?>
 	<br /><br />
 	<table class = "transactions" align = "center">
+	<tr>
+		<td colspan = "4" align = "center">
+			<form name = 'viewtransaction' action='viewTransactions.php' method='post'>
+			Start Date: <input type="text" name="start_date" />
+			End Date: <input type="text" name="end_date" /><br />
+			<input name="date" type="submit" value="Filter" />
+			<input name="reset" type="submit" value="View All" />
+			</form>
+		</td>
+	</tr>
 <?php
 	$myTotal = 0; $overallTotal = 0;
 	while($row = oci_fetch_object($statement))
@@ -80,5 +97,6 @@
 </head>
 
 <body>
+
 </body>
 </html>

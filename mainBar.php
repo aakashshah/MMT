@@ -41,6 +41,26 @@
 				{
 					$give = $row->AMT;
 				}
+				
+				/* When payments and loans are included, the values can be negative
+				in that case, transfer the amount to other side */
+				if (($give < 0) && ($collect < 0))
+				{
+					/* swap give and collect */
+					$temp = $give;
+					$give = $collect;
+					$collect = $temp;
+				}
+				else if ($give < 0)
+				{
+					$collect = $collect - $give;
+					$give = 0;
+				}
+				else if ($collect < 0)
+				{
+					$give = $give - $collect;
+					$collect = 0;
+				}
 			?>
 			<a class = "bar" href='give.php'>Give&nbsp;$<?php echo $give; ?></a>
 		</td>
@@ -68,7 +88,7 @@
 	</tr>
 </table>
 <!-- This is to implement the monthly budget bar -->
-<table border = "0" cellpadding = "0" cellspacing = "0">
+<table border = "0" cellpadding = "0" cellspacing = "0" width = "100%">
 	<tr>
 		<?php
 			$budgetQuery = "select sum(shared_amt) as amt from shares s, transaction t where t.trans_id = s.trans_id and t.txn_date like '%".strtoupper(date('M-y'))."'";
@@ -93,23 +113,35 @@
 			/* If the monthly budget is not defined */
 			if ($_SESSION['mbudget'] == 0)
 			{
-				echo "keep track of your expenses. define monthly budget now!";
+				echo "<td bgcolor='#A4C639' width='100%'><font color='#000000' size='3'><a href='profileSettings.php'>Keep track of your expenses! Click here to define monthly budget now!</a></font></td>";
 			}
 			else // the monthly budget is defined
 			{
 				if ($monthExp > $_SESSION['mbudget'])
 				{
-					echo "budget overdue by $".($_SESSION['mbudget'] - $monthExp)."!";
+					echo "<td bgcolor='#A4C639' width='100%'><font color='#000000' size='3'>Budget overdue by $".($monthExp - $_SESSION['mbudget'])."!</font></td>";
 				}
 				else
 				{
 					/* Calculate Percentage */
-					$monthExp = ($monthExp / $_SESSION['mbudget']) * 100;
-					$monthExp = round($monthExp);
+					$monthPercentage = ($monthExp / $_SESSION['mbudget']) * 100;
+					$monthPercentage = round($monthPercentage);
+					
+					/* Display in used td */
+					if ($monthPercentage < 50)
+					{
+						$unUsedString = "<font color='#000000' size='2'>$".$monthExp." of $".$_SESSION['mbudget']." used</font>";
+						$usedString = "";
+					}
+					else // disply in unused td
+					{
+						$usedString = "<font color='#000000' size='2'>$".$monthExp." of $".$_SESSION['mbudget']." used</font>";
+						$unUsedString = "";
+					}
 					
 					/* Colour used as royalblue */
-					echo "<td bgcolor='royalblue' width='".$monthExp."'></td>";
-					echo "<td bgcolor='#A4C639' width='100%'></td>";
+					echo "<td bgcolor='#99CCFF' width='".$monthPercentage."' align='right'>".$usedString."</td>";
+					echo "<td bgcolor='#A4C639' width='".(100 - $monthPercentage)."'>".$unUsedString."</td>";
 				}
 			}
 		?>

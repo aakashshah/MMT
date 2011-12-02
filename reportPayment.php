@@ -18,14 +18,81 @@
                 die("Failed to include mainbar!");
         }
 
-        $query = "select cat_id,cat_desc from category";
-	$statementCategory = oci_parse($connection, $query);
-	if (!oci_execute($statementCategory))
+	if(isset($_POST['submit']))
 	{
-		echo $query;
-		die("Failed to execute query!");
-	}
+		$personMakingPayment = $_POST['personMakingPayment'];
+		$personReceivingPayment = $_POST['personReceivingPayment'];
+		$paymentAmt = $_POST['paymentAmt'];
+		$paymentDate = $_POST['paymentDate'];
+		$paymentDescription = $_POST['paymentDescription'];
+		
+		//echo $personMakingPayment.$personReceivingPayment.$paymentAmt.$paymentDate.$paymentDescription;
 
+		//find trans_id and cat_id
+		$queryMaxTxnId = "select MAX(trans_id) as m from transaction";
+		$statement = oci_parse($connection, $queryMaxTxnId);
+		if (!oci_execute($statement))
+		{
+			echo $query;
+			die ("Failed to execute query!");
+		}
+		
+		$row = oci_fetch_object($statement);
+		if (!$row)
+		{
+			$txnId = 1;
+		}
+		else
+		{
+			$txnId = ($row->M) + 1;
+		}
+
+		//insertion into transaction
+		$txn_type = "PY"; //hard-coded to "PY" type for Payment
+
+		$queryCatId = "select count(*) from category where cat_id = -1";
+		$statementCatId = oci_parse($connection, $queryCatId);
+		if (!oci_execute($statementCatId))
+		{
+			echo $query;
+			die("reportPayment.php: cannot execute on table category ");
+		}
+		$rowCatIdCnt = oci_fetch_array($statementCatId);
+		
+		//if cat_id of -1 does not exist, create one 
+		if( !$rowCatIdCnt[0])
+		{
+			$queryCatIdMinusOne = "insert into category values(-1,'defined for Payment Type')";
+			$statementCatId = oci_parse($connection, $queryCatIdMinusOne);
+			if (!oci_execute($statementCatId))
+			{
+				echo $query;
+				die("reportPayment.php: cannot execute on table category ");
+			}
+		}
+
+
+		$catId = -1; //hard-coded to -1 for Payment category id
+		$query = "insert into transaction values ($txnId, $catId,'".$txn_type ."','". $paymentDescription."' ,$paymentAmt,to_date('".$paymentDate ."','yyyy-mm-dd'))";
+		$statement = oci_parse($connection, $query);
+
+		if (!oci_execute($statement))
+		{
+			echo $query;
+			die("TRANSACTION NOT  added!");
+		}
+
+		//insertion into participates
+		$query = "insert into participates values ('".$personReceivingPayment."','".$personMakingPayment."',$txnId ,$catId  , -($paymentAmt))";
+		$statement = oci_parse($connection, $query);
+		if (!oci_execute($statement))
+		{
+			echo $query;
+			die("insertion into participates table failed!");
+		}
+		echo("<br>Transaction added successfully<br>");	
+
+	}
 ?> 
 <html><head><title>Report a Payment</title></head>
 <body>
@@ -92,7 +159,7 @@
 			    document.getElementById("update").innerHTML = " \
 			    <table border = 0><tr><td><b>Description:</b></td><td>You received from " + userToSettleWith  +"</td></tr> \
 			    <tr><td><b>Person making payment:</b></td><td> "+userToSettleWith+ "</td></tr>\
-			    <tr><td><b>Person receiving payment:</b></td><td><? echo $_SESSION['email']; ?> (you)</td></tr></table><br/><br/>"; 
+			    <tr><td><b>Person receiving payment:</b></td><td><? echo $_SESSION['email']; ?> (you)</td></tr></table><br/><br/><input type='hidden' name = 'personMakingPayment' value = '" + userToSettleWith + "'> </input> <input type='hidden' name = 'personReceivingPayment' value= '<?echo $_SESSION['email'];?>'> </input>" ;
 		    }
 		    //if paid
 		    else if(received == 0)
@@ -100,7 +167,7 @@
 			    document.getElementById("update").innerHTML = " \
 			    <table border = 0><tr><td><b>Description:</b></td><td>You paid " + userToSettleWith +" </td></tr>\
 			    <tr><td><b>Person making payment:</b></td><td> <?php echo $_SESSION['email']; ?> (you)</td></tr>\
-			    <tr><td><b>Person receiving payment:</b></td><td> "+ userToSettleWith + "</td></tr></table><br/><br/>"  ;
+			    <tr><td><b>Person receiving payment:</b></td><td> "+ userToSettleWith + "</td></tr></table><br/><br/><input type='hidden' name='personMakingPayment' value='<? echo $_SESSION['email']; ?>' > </input> <input type='hidden' name = 'personReceivingPayment' value= "+ userToSettleWith +"></input>" ;
 		    }	
 
 		    document.getElementById("update").innerHTML += " \

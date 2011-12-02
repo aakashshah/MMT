@@ -146,7 +146,7 @@ function whoParticipatedFunction(emailId,divName)
 	
 		//update transaction table
 		// trans_id, cat_id, type, txn_desc, tot_amt, date
-		$type = "EX"; //update transaction type later, TODO
+		$type = "EX"; //hard-coded to EX: expense type
 		$txn_desc = "txn desc" ; //update txn desc later , TODO
 		$txn_amt = (int)$_POST['trans_amt'];
 		$txn_date = $_POST['trans_date'];

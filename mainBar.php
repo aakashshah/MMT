@@ -142,6 +142,26 @@
 					/* Colour used as royalblue */
 					echo "<td bgcolor='#99CCFF' width='".$monthPercentage."' align='right'>".$usedString."</td>";
 					echo "<td bgcolor='#A4C639' width='".(100 - $monthPercentage)."'>".$unUsedString."</td>";
+					
+					/* Check if mail needs to be sent to the user */
+					if ($monthPercentage > 90)
+					{
+						if (!isset($_SESSION['notification'])
+							|| ($_SESSION['notification'] == 'notsent'))
+						{
+							$to = $_SESSION['email'];
+							$headers = "From: admin@mmt.com";
+							$subject = "Budget Overdue Notification";
+							$message = "Greetings ".ucfirst($_SESSION['alias']).",\n\nThis is to notify that your monthly expense is nearing your budget limit or has already exceeded!\nYour current monthly expense: $".$monthExp.".\nYour defined monthly budget is: $".$_SESSION['mbudget'].".\n\nYours truly,\nAdminstrator\nMMT.com\n";
+							mail($to, $subject, $message, $headers);
+						}
+						
+						$_SESSION['notification'] = 'sent';
+					}
+					else
+					{
+						$_SESSION['notification'] = 'notsent';
+					}
 				}
 			}
 		?>

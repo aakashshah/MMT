@@ -38,8 +38,8 @@
 				if ('admin@mmt.com' != $_SESSION['email'])
 				{
 			?>
-				<td>Transactions</td>
-				<td>Other</td>
+				<td bgcolor = "#A4C639">Transactions</td>
+				<td bgcolor = "#A4C639">Other</td>
 			<?php
 				}
 			else

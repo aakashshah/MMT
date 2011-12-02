@@ -25,13 +25,13 @@ if (!isset($_SESSION['email']))
 	?>
 	
 	<br /><br />
-	<table border = "0">
+	<table border = "0" align = "center">
 	<tr>
-		<td>Your search for '<i><?=$searchString?></i>' returned the following results</td>
+		<td colspan = "4">Your search for '<i><?=$searchString?></i>' returned the following results</td>
 	</tr>
-	</table>
-	
-	<!----------------------- Display Categories ------------------------------>
+	<tr>
+		<td valign="top">
+			<!----------------------- Display Categories ------------------------------>
 	<table class = "transactions">
 	<?php
 	$query = "select cat_desc from Category where cat_desc like '%".$searchString."%'";
@@ -42,7 +42,7 @@ if (!isset($_SESSION['email']))
 	}
 	
 	$totalRows = 0;
-	echo "<tr><td class = 'transactions'>Category Description</td></tr>";
+	echo "<tr><td class = 'transactions' bgcolor = '#A4C639'>Category Description</td></tr>";
 	while ($row = oci_fetch_object($statement))
 	{
 		$totalRows = $totalRows + 1;		
@@ -52,12 +52,13 @@ if (!isset($_SESSION['email']))
 	echo "<tr><td class = 'transactions'><i>Total Rows: ".$totalRows."</i></td></tr>";
 	?>
 	</table>
-	<br />
-	<!----------------------- Display Transactions ------------------------------>
+		</td>
+		<td valign="top">
+		<!----------------------- Display Transactions ------------------------------>
 	<table class = "transactions">
 	<?php
 	$totalRows = 0;
-	echo "<tr><td class = 'transactions' colspan = '3'>Transactions</td></tr>";
+	echo "<tr><td class = 'transactions' colspan = '3' bgcolor = '#A4C639'>Transactions</td></tr>";
 	//$query = "select txn_desc, tot_amt, txn_date from transaction where txn_desc like '%".$searchString."%'";
 	$query = "select txn_desc, tot_amt, txn_date from transaction t, participates p where p.trans_id = t.trans_id and p.email_add = '".$_SESSION['email']."' and txn_desc like '%".$searchString."%'";
 	$statement = oci_parse($connection, $query);
@@ -86,12 +87,13 @@ if (!isset($_SESSION['email']))
 	echo "<tr><td class = 'transactions' colspan = '3'><i>Total Rows: ".$totalRows."<i></td></tr>";
 	?>
 	</table>
-	<br />
-	<!----------------------- Display Friends ------------------------------>
+		</td>
+		<td valign="top">
+			<!----------------------- Display Friends ------------------------------>
 	<table class = "transactions">
 	<?php
 	$totalRows = 0;
-	echo "<tr><td class = 'transactions' colspan = '3'>Users</td></tr>";
+	echo "<tr><td class = 'transactions' colspan = '3' bgcolor = '#A4C639'>Friends</td></tr>";
 	
 	$query = "select ph_no, name, email_add from users where (name like '%".$searchString."%'  or email_add like '%".$searchString."%' ) and email_add in (select friend_email_add from users, has_friends where users.email_add = has_friends.email_add and users.email_add = '".$_SESSION['email']."')";
 	$statement = oci_parse($connection, $query);
@@ -120,12 +122,13 @@ if (!isset($_SESSION['email']))
 	echo "<tr><td class = 'transactions' colspan = '3'><i>Total Rows: ".$totalRows."</i></td></tr>";
 	?>
 	</table>
-	<br />
-	<!----------------------- Display Groups ------------------------------>
+		</td>
+		<td valign="top">
+		<!----------------------- Display Groups ------------------------------>
 	<table class = "transactions">
 	<?php
 	$totalRows = 0;
-	echo "<tr><td class = 'transactions'>User Group</td></tr>";
+	echo "<tr><td class = 'transactions' bgcolor = '#A4C639'>User Group</td></tr>";
 	
 	//$query = "select group_name from usergroup where group_name like '%".$searchString."%'" ;
 	$query = "select group_name from usergroup u, belongs_to b where b.group_id = u.group_id and b.email_add = '".$_SESSION['email']."' and group_name like '%".$searchString."%'";
@@ -142,7 +145,9 @@ if (!isset($_SESSION['email']))
 	echo "<tr><td class = 'transactions'><i>Total Rows: ".$totalRows."</i></td></tr>";
 	?>
 	</table>
-
+		</td>
+	</tr>
+	</table>
 
 <html>
 <head><title>Search Results - MMT</title></head>

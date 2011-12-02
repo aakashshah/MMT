@@ -25,6 +25,7 @@
 			<td align = "center" valign = "top">
 	<table class = "transactions">
 	<?php
+		/* First check for the actual 'give' type (right column summation) */
 		$firstRow = 1;
 		$query = "select email_add as friend, sum (with_amt) as amt from participates where with_username = '".$_SESSION['email']."' group by email_add order by amt";
 		$amtSet = "";
@@ -60,6 +61,8 @@
 			}
 			echo "<tr><td class = 'transactions'>".$row->FRIEND."</td><td class = 'transactions'>".$row->AMT."</td></tr>";
 		}
+		
+		/* First check for the actual 'give' type (right column summation) */
 	?>
 	</table>
 			</td>

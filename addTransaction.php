@@ -107,7 +107,7 @@ function whoParticipatedFunction(emailId,divName)
                 die("Failed to include mainbar!");
         }
 
-        $query = "select cat_id,cat_desc from category";
+        $query = "select cat_id,cat_desc from category where cat_id >0";
 	$statementCategory = oci_parse($connection, $query);
 	if (!oci_execute($statementCategory))
 	{
@@ -347,7 +347,7 @@ function whoParticipatedFunction(emailId,divName)
 			<?php
 			echo "<div id = 'whoPaid'></div>";
 			echo "Add Someone: ";
-			echo '<select name = "nameWhoPaid" onClick="whoPaidFunction(this.value,\'whoPaid\')"  />';
+			echo '<select name = "nameWhoPaid" onChange="whoPaidFunction(this.value,\'whoPaid\')"  />';
 			?>
 			<br>
 			
@@ -382,7 +382,7 @@ function whoParticipatedFunction(emailId,divName)
 	
                         <br><br><b>Who participated:</b><br>
 			<div id = 'whoParticipated'></div> 
-			Add Someone:<select name = "who_participated" onClick="whoParticipatedFunction(this.value,'whoParticipated')" />
+			Add Someone:<select name = "who_participated" onChange="whoParticipatedFunction(this.value,'whoParticipated')" />
 			<?php
 					$query1 = "select friend_email_add from has_friends where email_add = '".$_SESSION['email']."'";
 					$statement1 = oci_parse($connection, $query1);

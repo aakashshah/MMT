@@ -141,8 +141,8 @@ function whoParticipatedFunction(emailId,divName)
 		}
 
 
-		$catRow = oci_fetch_object($statementCategory);
-		$catId = $catRow->CAT_ID;
+		//$catRow = oci_fetch_object($statementCategory);
+		//$catId = $catRow->CAT_ID;
 	
 		//update transaction table
 		// trans_id, cat_id, type, txn_desc, tot_amt, date
@@ -150,7 +150,7 @@ function whoParticipatedFunction(emailId,divName)
 		$txn_desc = $_POST['trans_desc'];
 		$txn_amt = (int)$_POST['trans_amt'];
 		$txn_date = $_POST['trans_date'];
-
+		$catId = $_POST['category'];//category id corrected, should be feteched from option selected
 		$query = "insert into transaction values ($txnId, $catId,'".$type ."','". $txn_desc."' ,$txn_amt,to_date('".$txn_date ."','yyyy-mm-dd'))";
 		$statement = oci_parse($connection, $query);
 

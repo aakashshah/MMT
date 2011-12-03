@@ -171,7 +171,14 @@ function whoParticipatedFunction(emailId,divName)
                 	$row = oci_fetch_object($statement);
 			$txn_desc=$row->M;
 		}
-		$query = "insert into transaction values ($txnId, $catId,'".$type ."','". $txn_desc."' ,$txn_amt,to_date('".$txn_date ."','yyyy-mm-dd'))";
+//		$query = "insert into transaction values ($txnId, $catId,'".$type ."','". $txn_desc."' ,$txn_amt,to_date('".$txn_date ."','yyyy-mm-dd'))";
+		if(strlen($txn_date)==0)
+                {
+                        $query = "insert into transaction values ($txnId, $catId,'".$type ."','". $txn_desc."' ,$txn_amt,sysdate)";
+                }
+                else{
+                        $query = "insert into transaction values ($txnId, $catId,'".$type ."','". $txn_desc."' ,$txn_amt,to_date('".$txn_date ."','yyyy-mm-dd'))";
+                }
 		$statement = oci_parse($connection, $query);
 
 		if (!oci_execute($statement))

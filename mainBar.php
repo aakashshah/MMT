@@ -48,8 +48,8 @@
 				{
 					/* swap give and collect */
 					$temp = $give;
-					$give = $collect;
-					$collect = $temp;
+					$give = (-$collect);
+					$collect = (-$temp);
 				}
 				else if ($give < 0)
 				{

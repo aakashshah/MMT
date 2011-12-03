@@ -59,8 +59,14 @@ if (!isset($_SESSION['email']))
 	<?php
 	$totalRows = 0;
 	echo "<tr><td class = 'transactions' colspan = '3' bgcolor = '#A4C639'>Transactions</td></tr>";
-	//$query = "select txn_desc, tot_amt, txn_date from transaction where txn_desc like '%".$searchString."%'";
-	$query = "select txn_desc, tot_amt, txn_date from transaction t, participates p where p.trans_id = t.trans_id and p.email_add = '".$_SESSION['email']."' and txn_desc like '%".$searchString."%'";
+	if ($_SESSION['email'] == 'admin@mmt.com')
+	{
+		$query = "select txn_desc, tot_amt, txn_date from transaction where txn_desc like '%".$searchString."%'";
+	}
+	else
+	{
+		$query = "select txn_desc, tot_amt, txn_date from transaction t, shares s where s.trans_id = t.trans_id and s.email_add = '".$_SESSION['email']."' and txn_desc like '%".$searchString."%'";
+	}
 	$statement = oci_parse($connection, $query);
 	if (!oci_execute($statement))
 	{

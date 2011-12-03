@@ -25,7 +25,7 @@
 	}
 	else
 	{
-		$query = "select name, txn_date, txn_desc, tot_amt, shared_amt from shares s, transaction t, users u where u.email_add = s.email_add and s.trans_id = t.trans_id".$whereClause." order by txn_date desc";
+		$query = "select name, txn_date, txn_desc, tot_amt, shared_amt from shares s, transaction t, participates p where s.email_add = '".$_SESSION['email']."' and p.trans_id = s.trans_id and s.trans_id = t.trans_id".$whereClause." order by txn_date desc";
 	}
 
 	$statement = oci_parse($connection, $query);

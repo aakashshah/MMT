@@ -33,7 +33,10 @@ function arraySearch(arr,val)
 	}
 	return -1;
 }
-
+function form_input_is_numeric(input)
+{
+    return !isNaN(input);
+}
 function whoParticipatedFunction(emailId,divName)
 {
         var newdiv = document.createElement('div');
@@ -136,7 +139,6 @@ function whoParticipatedFunction(emailId,divName)
 		}
 		else
 		{
-			//echo $row->M;
 			$txnId = ($row->M) + 1;
 		}
 
@@ -148,9 +150,27 @@ function whoParticipatedFunction(emailId,divName)
 		// trans_id, cat_id, type, txn_desc, tot_amt, date
 		$type = "EX"; //hard-coded to EX: expense type
 		$txn_desc = $_POST['trans_desc'];
+		$txn_amt = $_POST['trans_amt'];
+		if(!preg_match('/^[0-9]{1,}$/', $txn_amt)) 
+			echo "<script>alert('Wrong Amount Entered.Please enter correct Amount!!!');</script>";
+		else
+		{
 		$txn_amt = (int)$_POST['trans_amt'];
 		$txn_date = $_POST['trans_date'];
 		$catId = $_POST['category'];//category id corrected, should be feteched from option selected
+		if(strlen($txn_desc)==0)
+		{
+			$queryMaxTxnId = "select cat_desc as m from category where cat_id = '".$catId."'";
+                	$statement = oci_parse($connection, $queryMaxTxnId);
+                	if (!oci_execute($statement))
+                	{
+                        	echo $query;
+                        	die ("Failed to execute query!");
+                	}
+
+                	$row = oci_fetch_object($statement);
+			$txn_desc=$row->M;
+		}
 		$query = "insert into transaction values ($txnId, $catId,'".$type ."','". $txn_desc."' ,$txn_amt,to_date('".$txn_date ."','yyyy-mm-dd'))";
 		$statement = oci_parse($connection, $query);
 
@@ -219,9 +239,10 @@ function whoParticipatedFunction(emailId,divName)
 			$whosharedAmt=$whosharedAmt+$sharedAmt[$i];
 			$k = $k + 1;
 		}
-		
-		if($whosharedAmt!=$whoPaidAmt && $whoPaidAmt!=$trans_amt)
-			echo "<script>alert('Wrong Amount Entered. Please enter correct Amount!!!');</script>";
+		if($txn_amt!=$whoPaidAmt)
+			 echo "<script>alert('Please enter correct  contribution Amount!!!');</script>";
+		else if($whosharedAmt!=$whoPaidAmt)
+			echo "<script>alert('Paid and Contribution Amount not Matching. Please enter correct Amount!!!');</script>";
 		else
 		{
 		//sort finalAmt[] along with finalEmailIds
@@ -286,6 +307,7 @@ function whoParticipatedFunction(emailId,divName)
 		}
 		header("Location:home.php");
 		}
+		}
 	}
 ?>
 
@@ -308,7 +330,7 @@ function whoParticipatedFunction(emailId,divName)
 						break;
 					}
 									
-				echo "<option value = '".$row->CAT_DESC."'>  ".$row->CAT_DESC." </option>";
+				echo "<option value = '".$row->CAT_ID."'>  ".$row->CAT_DESC." </option>";
 
 				}
 			?>

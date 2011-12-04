@@ -250,6 +250,8 @@ function whoParticipatedFunction(emailId,divName)
 			 echo "<script>alert('Please enter correct  contribution Amount!!!');</script>";
 		else if($whosharedAmt!=$whoPaidAmt)
 			echo "<script>alert('Paid and Contribution Amount not Matching. Please enter correct Amount!!!');</script>";
+		else if($whoPaidAmt==0)
+			echo "<script>alert('Please enter amount other than zero ');</script>";	
 		else
 		{
 		//sort finalAmt[] along with finalEmailIds
@@ -348,11 +350,11 @@ function whoParticipatedFunction(emailId,divName)
 			echo "<div id = 'whoPaid'></div>";
 			echo "Add Someone: ";
 			echo '<select name = "nameWhoPaid" onChange="whoPaidFunction(this.value,\'whoPaid\')"  />';
+        		echo '<option selected>----</option>';
 			?>
 			<br>
 			
                         <?php
-
 				echo "<option value = '".$_SESSION['email']."'> ".$_SESSION['email']."</option>";
 				$count=0;	
                                 while(1)
@@ -383,6 +385,7 @@ function whoParticipatedFunction(emailId,divName)
                         <br><br><b>Who participated:</b><br>
 			<div id = 'whoParticipated'></div> 
 			Add Someone:<select name = "who_participated" onChange="whoParticipatedFunction(this.value,'whoParticipated')" />
+			echo '<option selected>----</option>';
 			<?php
 					$query1 = "select friend_email_add from has_friends where email_add = '".$_SESSION['email']."'";
 					$statement1 = oci_parse($connection, $query1);

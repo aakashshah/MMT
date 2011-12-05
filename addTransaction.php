@@ -7,6 +7,8 @@ var paidarray = new Array();
 var count1=0;
 function whoPaidFunction(emailId,divName)
 {
+	   if(emailId == '----')
+		return;
            if(arraySearch(paidarray,emailId)==-1)
            {
                 paidarray[count1]=emailId;
@@ -39,6 +41,8 @@ function form_input_is_numeric(input)
 }
 function whoParticipatedFunction(emailId,divName)
 {
+	if(emailId == '----')
+		return;
         var newdiv = document.createElement('div');
         if(emailId.substring(0,5)=="Group")
         {

@@ -32,13 +32,12 @@
 	{
 		echo "<br />USERS table already present!<br />";
 	}
+	
+	/* Create admin always */
+	$statement = oci_parse($connection, "insert into users values ('admin@mmt.com', '21232f297a57a5a743894a0e4a801fc3', 'admin', 0, 0, 0)");
+	oci_execute($statement);
 
 	//CATEGORY
-	$statement = oci_parse($connection, 'insert into category values(0,'defined for Payment type'');
-	 if (!oci_execute($statement))
-                {
-                        die("Insert into CATEGORY table failed!");
-                }	
 	$statement = oci_parse($connection, 'select 1 from category');
 
 	if (false == oci_execute($statement))
@@ -57,6 +56,16 @@
 	{
 		echo "<br />CATEGORY table already present!<br />";
 	}
+	
+	/* Create default categories */
+	$statement = oci_parse($connection, "insert into category values (0,'Dummy')");
+	oci_execute($statement);
+	$statement = oci_parse($connection, "insert into category values (1, 'Groceries')");
+	oci_execute($statement);
+	$statement = oci_parse($connection, "insert into category values (2, 'Restaurant')");
+	oci_execute($statement);
+	$statement = oci_parse($connection, "insert into category values (3, 'Clothing')");  	
+	oci_execute($statement);
 
 	//TRANSACTION
 	$statement = oci_parse($connection, 'select 1 from transaction');

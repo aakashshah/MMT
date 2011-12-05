@@ -75,7 +75,7 @@
 		while ($row = oci_fetch_object($statement))
 		{
 			/* If the amount is 0 or negative, it should not be displayed */
-			if ($row->AMT > 0)
+			if ($row->AMT >= 0)
 			{
 				continue;
 			}

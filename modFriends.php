@@ -20,6 +20,29 @@
 
 	if(isset($_POST['add_email']))
 	{
+		/* Check if the user exists */
+		$query = "select * from users where email_add = '".$_POST['adding_email']."'";
+		$statement = oci_parse($connection, $query);
+		if (!oci_execute($statement))
+		{
+			echo "line27<br />";
+			die($query);
+		}
+		$row = oci_fetch_object($statement);
+		
+		/* If the friend does not exists, create a dummy friend, with blank password */
+		if (!$row)
+		{
+			$query = "insert into users values ('".$_POST['adding_email']."', 'd41d8cd98f00b204e9800998ecf8427e', 'NA', 0, '0000000000', -1)";
+			$statement = oci_parse($connection, $query);
+			if (!oci_execute($statement))
+			{
+				echo "line40<br />";
+				die($query);
+			}
+		}
+		
+		
 		$query = "insert into has_friends values ('".$_SESSION['email']."', '".$_POST['adding_email']."', 0)";
 		$statement = oci_parse($connection, $query);
 

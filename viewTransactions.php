@@ -63,12 +63,12 @@
 	{
 		$displayName = "";
 		$displayNameColumn = "";
-		$colspan = 2;
+		$colspan = 3;
 		if ($_SESSION['email'] == 'admin@mmt.com')
 		{
 			$displayNameColumn = "<td class = 'transactions'>Name</td>";
 			$displayName = "<td class = 'transactions'>".$row->NAME."</td>";
-			$colspan = 3;
+			$colspan = 4;
 		}
 		
 		if (1 == $firstRow)
@@ -78,7 +78,7 @@
 			echo "</tr>";
 			
 			echo "<tr>";			
-			echo $displayNameColumn."<td class = 'userNameColumn' >Name</td> <td class = 'transactions'>Date</td><td class = 'transactions'>Description</td><td class = 'transactions'>Your Share</td><td class = 'transactions'>Total Amount</td>";			
+			echo $displayNameColumn."<td class = 'transactions'>User</td> <td class = 'transactions'>Date</td><td class = 'transactions'>Description</td><td class = 'transactions'>Your Share</td><td class = 'transactions'>Total Amount</td>";			
 			echo "</tr>";
 			$firstRow = 0;
 		}
@@ -115,12 +115,12 @@
 	{
 		$displayName = "";
 		$displayNameColumn = "";
-		$colspan = 2;
+		$colspan = 3;
 		if ($_SESSION['email'] == 'admin@mmt.com')
 		{
 			$displayNameColumn = "<td class = 'transactions'>Name</td>";
 			$displayName = "<td class = 'transactions'>".$row->NAME."</td>";
-			$colspan = 3;
+			$colspan = 4;
 		}
 		
 		if (1 == $firstRow)
@@ -130,7 +130,7 @@
 			echo "</tr>";
 			
 			echo "<tr>";			
-			echo $displayNameColumn."<td class = 'transactions'>Name</td><td class = 'transactions'>Date</td><td class = 'transactions'>Description</td><td class = 'transactions'>Your Share</td><td class = 'transactions'>Total Amount</td>";			
+			echo $displayNameColumn."<td class = 'transactions'>User</td><td class = 'transactions'>Date</td><td class = 'transactions'>Description</td><td class = 'transactions'>Mode</td><td class = 'transactions'>Total Amount</td>";			
 			echo "</tr>";
 			$firstRow = 0;
 		}
@@ -147,7 +147,7 @@
 		}
 		
 		echo "<tr>";
-		echo $displayName."<td class = 'transactions'>".$row->NM."</td><td class = 'transactions'>".$row->TXN_DATE."<td class = 'transactions'>".$row->TXN_DATE."</td><td class = 'transactions'>".$row->TXN_DESC."</td><td class = 'transactions'>".$mode."</td><td class = 'transactions'>".$row->TOT_AMT."</td>";
+		echo $displayName."<td class = 'transactions'>".$row->NM."</td><td class = 'transactions'>".$row->TXN_DATE."</td><td class = 'transactions'>".$row->TXN_DESC."</td><td class = 'transactions'>".$mode."</td><td class = 'transactions'>".$row->TOT_AMT."</td>";
 		echo "</tr>";
 		$myTotal = $myTotal + $row->WITH_AMT;
 	}
@@ -190,12 +190,12 @@
 	{
 		$displayName = "";
 		$displayNameColumn = "";
-		$colspan = 2;
+		$colspan = 3;
 		if ($_SESSION['email'] == 'admin@mmt.com')
 		{
 			$displayNameColumn = "<td class = 'transactions'>Name</td>";
 			$displayName = "<td class = 'transactions'>".$row->NAME."</td>";
-			$colspan = 3;
+			$colspan = 4;
 		}
 		
 		if (1 == $firstRow)
@@ -205,7 +205,7 @@
 			echo "</tr>";
 			
 			echo "<tr>";			
-			echo $displayNameColumn."<td class = 'transactions'>Name</td><td class = 'transactions'>Date</td><td class = 'transactions'>Description</td><td class = 'transactions'>Your Share</td><td class = 'transactions'>Total Amount</td>";			
+			echo $displayNameColumn."<td class = 'transactions'>User</td><td class = 'transactions'>Date</td><td class = 'transactions'>Description</td><td class = 'transactions'>Mode</td><td class = 'transactions'>Total Amount</td>";			
 			echo "</tr>";
 			$firstRow = 0;
 		}

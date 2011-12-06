@@ -91,6 +91,23 @@ function whoParticipatedFunction(emailId,divName)
 		}
 	}
 }
+function validateCheck()
+{
+	var jVar = document.forms["Report_Expense"]["trans_amt"].value;
+        if (null == jVar || "" == jVar)
+        {
+                alert("Amount cannot be blank!");
+                //return false;
+        }
+	else if(0== jVar)
+	{
+		 alert("Amount cannot be Zero!");
+	}
+	else if(!form_input_is_numeric(jVar))
+	{
+		alert("Amount needs to be Numeric");
+	}
+}
 </script>
 
 <?php session_start();
@@ -155,9 +172,9 @@ function whoParticipatedFunction(emailId,divName)
 		$type = "EX"; //hard-coded to EX: expense type
 		$txn_desc = $_POST['trans_desc'];
 		$txn_amt = $_POST['trans_amt'];
-		if(!preg_match('/^[0-9]{1,}$/', $txn_amt)) 
-			echo "<script>alert('Wrong Amount Entered.Please enter correct Amount!!!');</script>";
-		else
+		//if(!preg_match('/^[0-9]{1,}$/', $txn_amt)) 
+		//	echo "<script>alert('Wrong Amount Entered.Please enter correct Amount!!!');</script>";
+		//else
 		{
 		$txn_amt = (int)$_POST['trans_amt'];
 		$txn_date = $_POST['trans_date'];
@@ -251,11 +268,9 @@ function whoParticipatedFunction(emailId,divName)
 			$k = $k + 1;
 		}
 		if($txn_amt!=$whoPaidAmt)
-			 echo "<script>alert('Please enter correct  contribution Amount!!!');</script>";
+			 echo "<script>alert('Please check Amount in Who Paid and Who Particiapted fields!!!');</script>";
 		else if($whosharedAmt!=$whoPaidAmt)
 			echo "<script>alert('Paid and Contribution Amount not Matching. Please enter correct Amount!!!');</script>";
-		else if($whoPaidAmt==0)
-			echo "<script>alert('Please enter amount other than zero ');</script>";	
 		else
 		{
 		//sort finalAmt[] along with finalEmailIds
@@ -326,8 +341,7 @@ function whoParticipatedFunction(emailId,divName)
 
 <html><head><title>Report Expense</title></head>
 <body>
-
-<form name = 'Report_Expense' action = 'addTransaction.php' method = 'post'>
+<form name = 'Report_Expense' action = 'addTransaction.php' onsubmit = 'return validateCheck() 'method = 'post'>
 		
 			Date:<input name = 'trans_date' type = 'date' />
 			<br>Total Amount:<input name = 'trans_amt' type = 'integer' />
@@ -400,14 +414,15 @@ function whoParticipatedFunction(emailId,divName)
 					}	
 
 				print $statement1;
-				$query2 = "select group_name from UserGroup where group_id in (select group_id from belongs_to  where email_add = '".$_SESSION['email']."')";
-                                $statement2 = oci_parse($connection, $query2);
-                                if (!oci_execute($statement2))
+				//$query2 = "select group_name from UserGroup where group_id in (select group_id from belongs_to  where email_add = '".$_SESSION['email']."')";
+                                echo "<option value = '".$_SESSION['email']."'> ".$_SESSION['email']."</option>";
+				$query2 = "select group_name from UserGroup where GROUP_OWNER =  '".$_SESSION['email']."'";
+				$statement2 = oci_parse($connection, $query2);
+				if (!oci_execute($statement2))
                                 {
                                         echo $query2;
                                         die("Failed to execute query!");
                                 }
-				echo "<option value = '".$_SESSION['email']."'> ".$_SESSION['email']."</option>";
 				while(1)
                                 {
                                         $row1 = oci_fetch_object($statement2);

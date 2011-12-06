@@ -59,6 +59,7 @@
 				<a href = "addTransaction.php">Add Transaction</a> <br />
 				<a href = "viewTransactions.php">View Transactions</a> <br />
 				<a href = "reportPayment.php">Report Payment</a> <br />
+				<a href = "reportLoanDebt.php">Report Loan/Debt</a> <br />
 			</td>
 			<td valign = "top">
 				<a href = "modFriends.php">Modify Friends</a> <br />

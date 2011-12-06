@@ -26,7 +26,7 @@
 		$paymentDate = $_POST['paymentDate'];
 		$paymentDescription = $_POST['paymentDescription'];
 		
-		//echo $personMakingPayment.$personReceivingPayment.$paymentAmt.$paymentDate.$paymentDescription;
+		echo $personMakingPayment.$personReceivingPayment.$paymentAmt.$paymentDate.$paymentDescription;
 
 		//find trans_id and cat_id
 		$queryMaxTxnId = "select MAX(trans_id) as m from transaction";
@@ -48,9 +48,9 @@
 		}
 
 		//insertion into transaction
-		$txn_type = "PY"; //hard-coded to "PY" type for Payment
+		$txn_type = "LN"; //hard-coded to "LN" type for Payment
 
-		$catId = 0; //hard-coded to 0 for Payment category id
+		$catId = 0; //0 for Payment category id
 		$query = "insert into transaction values ($txnId, $catId,'".$txn_type ."','". $paymentDescription."' ,$paymentAmt,to_date('".$paymentDate ."','yyyy-mm-dd'))";
 		$statement = oci_parse($connection, $query);
 
@@ -69,7 +69,7 @@
 			die("insertion into participates table failed!");
 		}
 		echo("<br>Transaction added successfully<br>");	
-
+		header("Location:index.php");
 	}
 ?> 
 <html><head><title>Report a Payment</title></head>
@@ -84,7 +84,7 @@
 		die("Failed to execute query!");
 	}
 	echo "<div id = 'whoSettled'></div>";
-	echo '<select id = "nameWhoSettled" onClick = "payment(2)" >';
+	echo '<select id = "nameWhoSettled" onClick = "debt(2)" >';
 	while(1)
 	{
 		$row = oci_fetch_object($statementFriend);
@@ -105,22 +105,22 @@
 	echo "</select>";
 ?>
 	<br /><br />
-	<b>Who Paid Whom: </b>
+	<b>Who owes money? </b>
 	<br />
 
 
-        <input type="radio" id = "payment"  name="payment" onclick="payment(0);" value = "madePayment" /> You made a Payment 
+        <input type="radio" id = "payment"  name="payment" onclick="debt(0);" value = "debt" />  The other person owes me (loan)  
 	<br/>
-        <input type="radio" id = "payment"  name="payment" onclick="payment(1);" value = "receivedPayment" /> You received a Payment
+        <input type="radio" id = "payment"  name="payment" onclick="debt(1);" value = "loan" />I owe the other person (debt)
 
-	<form name = "reportPayment" action = "reportPayment.php" method="post">
+	<form name = "reportPayment" action = "reportLoanDebt.php" method="post">
         <span id="update"></span>
 	<br/><br/>
 	<input type="submit" name = "submit" value ="Submit">
 	<input type="submit" name = "back" value="Cancel">
 	</form>
         <script type="text/javascript">
-            function payment(received){
+            function debt(received){
 		    var selected = document.getElementById("nameWhoSettled");
 		    var userToSettleWith = selected.options[selected.selectedIndex].value;
 			
@@ -135,17 +135,17 @@
 		    if(received == 1)
 		    {
 			    document.getElementById("update").innerHTML = " \
-			    <table border = 0><tr><td><b>Description:</b></td><td>You received from " + userToSettleWith  +"</td></tr> \
-			    <tr><td><b>Person making payment:</b></td><td> "+userToSettleWith+ "</td></tr>\
-			    <tr><td><b>Person receiving payment:</b></td><td><? echo $_SESSION['email']; ?> (you)</td></tr></table><br/><br/><input type='hidden' name = 'personMakingPayment' value = '" + userToSettleWith + "'> </input> <input type='hidden' name = 'personReceivingPayment' value= '<?echo $_SESSION['email'];?>'> </input>" ;
+			    <table border = 0><tr><td><b>Description:</b></td><td>You received loan from " + userToSettleWith  +"</td></tr> \
+			    <tr><td><b>Person giving loan:</b></td><td> "+userToSettleWith+ "</td></tr>\
+			    <tr><td><b>Person receiving loan:</b></td><td><? echo $_SESSION['email']; ?> (you)</td></tr></table><br/><br/><input type='hidden' name = 'personMakingPayment' value = '" + userToSettleWith + "'> </input> <input type='hidden' name = 'personReceivingPayment' value= '<?echo $_SESSION['email'];?>'> </input>" ;
 		    }
 		    //if paid
 		    else if(received == 0)
 		    {
 			    document.getElementById("update").innerHTML = " \
-			    <table border = 0><tr><td><b>Description:</b></td><td>You paid " + userToSettleWith +" </td></tr>\
-			    <tr><td><b>Person making payment:</b></td><td> <?php echo $_SESSION['email']; ?> (you)</td></tr>\
-			    <tr><td><b>Person receiving payment:</b></td><td> "+ userToSettleWith + "</td></tr></table><br/><br/><input type='hidden' name='personMakingPayment' value='<? echo $_SESSION['email']; ?>' > </input> <input type='hidden' name = 'personReceivingPayment' value= "+ userToSettleWith +"></input>" ;
+			    <table border = 0><tr><td><b>Description:</b></td><td>You gave loan to " + userToSettleWith +" </td></tr>\
+			    <tr><td><b>Person giving loan:</b></td><td> <?php echo $_SESSION['email']; ?> (you)</td></tr>\
+			    <tr><td><b>Person receiving loan:</b></td><td> "+ userToSettleWith + "</td></tr></table><br/><br/><input type='hidden' name='personMakingPayment' value='<? echo $_SESSION['email']; ?>' > </input> <input type='hidden' name = 'personReceivingPayment' value= "+ userToSettleWith +"></input>" ;
 		    }	
 
 		    document.getElementById("update").innerHTML += " \

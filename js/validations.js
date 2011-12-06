@@ -87,3 +87,53 @@ function validateProfileSettings()
 	
 	return true;
 }
+
+
+function validateReportPayment()
+{
+	var jVar = document.forms["reportPayment"]["paymentAmt"].value;
+	if (null == jVar || "" == jVar )
+	{
+		alert("Payment amount cannot be blank!");
+		return false;
+	}
+	if(0 == jVar)
+	{
+		alert("Payment amount cannot be zero!");
+		return false;
+	}
+
+	var jVar2 = document.forms["reportPayment"]["paymentDate"].value;
+	if (null == jVar2 || "" == jVar2)
+	{
+		alert("You must enter the Payment Date!");
+		return false;
+	}
+	
+	return true;
+}
+
+function validateReportLoanDebt()
+{
+	var jVar = document.forms["reportPayment"]["paymentAmt"].value;
+	if (null == jVar || "" == jVar )
+	{
+		alert("Payment amount cannot be blank!");
+		return false;
+	}
+	if(0 == jVar)
+	{
+		alert("Payment amount cannot be zero!");
+		return false;
+	}
+	
+	var jVar2 = document.forms["reportPayment"]["paymentDate"].value;
+	if (null == jVar2 || "" == jVar2)
+	{
+		alert("You must enter the Payment Date!");
+		return false;
+	}
+	
+	return true;
+
+}

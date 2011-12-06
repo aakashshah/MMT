@@ -56,8 +56,8 @@
 
 		if (!oci_execute($statement))
 		{
-			echo $query;
-			die("TRANSACTION NOT  added!");
+			//echo $query;
+			die("TRANSACTION NOT  added! Date not in proper format");
 		}
 
 		//insertion into participates
@@ -72,7 +72,8 @@
 		header("Location:index.php");
 	}
 ?> 
-<html><head><title>Report a Payment</title></head>
+<html><head><title>Report a Loan/Debt</title></head>
+<script type = "text/javascript" src = "js/validations.js"></script>
 <body>
 <b>With whom are you settling the payment?</b>
 <?php
@@ -113,7 +114,7 @@
 	<br/>
         <input type="radio" id = "payment"  name="payment" onclick="debt(1);" value = "loan" />I owe the other person (debt)
 
-	<form name = "reportPayment" action = "reportLoanDebt.php" method="post">
+	<form name = "reportPayment" action = "reportLoanDebt.php" onsubmit = "return validateReportLoanDebt()" method="post">
         <span id="update"></span>
 	<br/><br/>
 	<input type="submit" name = "submit" value ="Submit">

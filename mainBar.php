@@ -32,58 +32,9 @@
 					}
 					else if ($row->AMT < 0)
 					{
-						$give = $give + $row->AMT;
+						$give = $give + (-$row->AMT);
 					}
 					/* We do not want to calculate 0 sums */
-				}
-				
-				/*
-				
-				$queryCollect = "select sum(with_amt) as amt from participates where email_add = '".$_SESSION['email']."'";
-				$stmt = oci_parse($connection, $queryCollect);
-				if (!oci_execute($stmt))
-				{
-					echo $queryCollect;
-					die("Failed to execute query");
-				}
-				$row = oci_fetch_object($stmt);
-				if ($row->AMT)
-				{
-					$collect = $row->AMT;
-				}
-				
-				$queryGive = "select sum(with_amt) as amt from participates where with_username = '".$_SESSION['email']."'";
-				$stmt = oci_parse($connection, $queryGive);
-				if (!oci_execute($stmt))
-				{
-					echo $queryGive;
-					die("Failed to execute query");
-				}
-				$row = oci_fetch_object($stmt);
-				
-				if ($row->AMT)
-				{
-					$give = $row->AMT;
-				}*/
-				
-				/* When payments and loans are included, the values can be negative
-				in that case, transfer the amount to other side */
-				if (($give < 0) && ($collect < 0))
-				{
-					/* swap give and collect */
-					$temp = $give;
-					$give = (-$collect);
-					$collect = (-$temp);
-				}
-				else if ($give < 0)
-				{
-					$collect = $collect - $give;
-					$give = 0;
-				}
-				else if ($collect < 0)
-				{
-					$give = $give - $collect;
-					$collect = 0;
 				}
 			?>
 			<a class = "bar" href='give.php'>Give&nbsp;$<?php echo $give; ?></a>

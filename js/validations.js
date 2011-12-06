@@ -137,3 +137,16 @@ function validateReportLoanDebt()
 	return true;
 
 }
+function validateGroup()
+{
+	var jVar1 = document.forms["groupform"]["my_group_name"].value;
+	var jVar2 = document.forms["groupform"]["my_friend_name"].value;
+	if (null == jVar1 || "" == jVar1 || null == jVar2 || "" == jVar2)
+	{
+		alert("Group Name or Friend Name cannot be blank!");
+		return false;
+	}
+
+	return true;
+
+}

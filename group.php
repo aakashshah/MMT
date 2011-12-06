@@ -6,18 +6,18 @@
 	{
 		header("Location:index.php");
 	}
-	
+
 	if (!require("connection.php"))
 	{
 		// connection failure return error code 1
 		exit(1);
 	}
-	
+
 	if (!require("mainBar.php"))
 	{
 		die("Failed to include mainbar!");
 	}
-	
+
 	if(isset($_POST['group_name']))
 	{
 		$query = "select MAX(group_id) as m from usergroup";
@@ -27,7 +27,7 @@
 			echo $query;
 			die ("Failed to execute query!");
 		}
-		
+
 		$row = oci_fetch_object($statement);
 		if (!$row)
 		{
@@ -43,18 +43,30 @@
 
 		$finalStatement = oci_parse($connection, $finalquery);
 
-		if (!oci_execute($finalStatement))
+		if (!oci_execute($finalStatement, OCI_NO_AUTO_COMMIT))
 		{
 			echo $finalquery;
 			die("User group could not be added!");
 		}
+		
+		$query = "insert into belongs_to values ('".$_POST['my_friend_name']."', $groupId)";
+
+		$Statement = oci_parse($connection, $query);
+
+		if (!oci_execute($Statement))
+		{
+			echo $query;
+			die("User could not be added!");
+		}
+		
+		
 		header("Location:home.php");
 	}
 	/***************     Adding a friend to a group  *************************/
 	else if (isset($_POST['group_friend']))
 	{
 		$id = $_POST['to_group'];
-				
+
 		$finalQuery = "insert into belongs_to values ('".$_POST['add_friend_email']."',".$id.")";
 		$finalStatement = oci_parse($connection, $finalQuery);
 		if (!oci_execute($finalStatement))
@@ -70,7 +82,7 @@
 	else if (isset($_POST['delete_friend']))
 	{
 		$id = $_POST['gname'];
-		
+
 		$finalQuery = "delete from belongs_to where email_add = '".$_POST['friend_delete_group']."' and group_id = ".$id;
 		$finalStatement = oci_parse($connection, $finalQuery);
 		if (!oci_execute($finalStatement))
@@ -78,7 +90,7 @@
 			echo $finalQuery;
 			die("Friend cannot be deleted!");
 		}
-		
+
 		$newQuery = "select * from belongs_to where group_id = ".$id;
 		$newStatement = oci_parse($connection, $newQuery);
 		if (!oci_execute($newStatement))
@@ -86,29 +98,30 @@
 			echo $newQuery;
 			die("Query failed!");
 		}
-		
+
 		$row = oci_fetch_object($newStatement);
 	        if (!$row)
 	        {
 			$deleteQuery = "delete from usergroup where group_id = ".$id;
 			$delStatement = oci_parse($connection, $deleteQuery);
-			
+
 			if (!oci_execute($delStatement))
 			{
 				echo $deleteQuery;
 				die("Group cannot be deleted!");
 			}
 		}
-		
+
 		header("Location:home.php");
 	}
 ?>
 
 <html>
 <head><title>Modify Groups - MMT</title></head>
+<script type = "text/javascript" src = "js/validations.js"></script>
 <body>
 
-<form name = 'groupform' action = 'group.php' method = 'post'>
+<form name = 'groupform' action = 'group.php'  onsubmit = 'return validateGroup()'  method = 'post'  >
 	<br />
 	<br />
 	<table class = "transactions" border = "0" align = "center">
@@ -119,6 +132,9 @@
 	<tr>
 	<td>
 	Group Name: <input type="text" name="my_group_name" />
+	<br />
+	<br />
+	Friend Name: <input type="text" name="my_friend_name" />
 	<input class = "mainButton" name="group_name" type="submit" value="Create" />
 	</td>
 	</tr>
@@ -158,7 +174,7 @@
 				echo $subQuery;
 				die("Failed to execute subquery!");
 			}
-		
+
 			$friendName = oci_fetch_object($subStatement);
 
 			echo "<option name= 'delete_email' value = '".$row->FRIEND_EMAIL_ADD."'>".$friendName->NAME." (".$row->FRIEND_EMAIL_ADD.")</option>";
@@ -183,7 +199,7 @@
 			{
 				break;
 			}
-			
+
 			echo "<option value=".$row->GROUP_ID.">".$row->GROUP_NAME."</option>";
 		}
 	?>
@@ -204,7 +220,7 @@
 			echo $grpQuery;
 			die ("Failed to execute query!");
 		}
-		
+
 		while (1)
 		{
 			$row = oci_fetch_object($statement);
@@ -212,7 +228,7 @@
 			{
 				break;
 			}
-			
+
 			/* group names do not allow  */
 			echo "<option value=".$row->GROUP_ID.">".$row->GROUP_NAME."</option>";
 		}

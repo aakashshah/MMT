@@ -23,17 +23,17 @@
 	{
 		$query = "select name, txn_date, txn_desc, tot_amt, shared_amt from shares s, transaction t, users u where u.email_add = s.email_add and t.txn_date between '".$_POST['start_date']."' and '".$_POST['end_date']."' and s.trans_id = t.trans_id".$whereClause." order by txn_date desc";
 		
-		$payQuery = "((select with_username, txn_date, type, txn_desc, tot_amt, (-with_amt) as with_amt from participates p, transaction t, users u where p.email_add = '".$_SESSION['email']."' and u.email_add = p.email_add and t.type = 'PY' and t.txn_date between '".$_POST['start_date']."' and '".$_POST['end_date']."' and p.trans_id = t.trans_id) union (select p.email_add, txn_date, type, txn_desc, tot_amt, with_amt from participates p, transaction t, users u where p.with_username = '".$_SESSION['email']."' and u.email_add = p.email_add and type = 'PY' and p.trans_id = t.trans_id and t.txn_date between '".$_POST['start_date']."' and '".$_POST['end_date']."'))";
+		$payQuery = "((select with_username as nm , txn_date, type, txn_desc, tot_amt, (-with_amt) as with_amt from participates p, transaction t, users u where p.email_add = '".$_SESSION['email']."' and u.email_add = p.email_add and t.type = 'PY' and t.txn_date between '".$_POST['start_date']."' and '".$_POST['end_date']."' and p.trans_id = t.trans_id) union (select p.email_add as nm, txn_date, type, txn_desc, tot_amt, with_amt from participates p, transaction t, users u where p.with_username = '".$_SESSION['email']."' and u.email_add = p.email_add and type = 'PY' and p.trans_id = t.trans_id and t.txn_date between '".$_POST['start_date']."' and '".$_POST['end_date']."'))";
 		
-		$loanQuery = "((select with_username, txn_date, type, txn_desc, tot_amt, (-with_amt) as with_amt from participates p, transaction t, users u where p.email_add = '".$_SESSION['email']."' and u.email_add = p.email_add and t.txn_date between '".$_POST['start_date']."' and '".$_POST['end_date']."' and t.type = 'LN' and p.trans_id = t.trans_id) union (select p.email_add, txn_date, type, txn_desc, tot_amt, with_amt from participates p, transaction t, users u where p.with_username = '".$_SESSION['email']."' and u.email_add = p.email_add and type = 'LN' and p.trans_id = t.trans_id and t.txn_date between '".$_POST['start_date']."' and '".$_POST['end_date']."'))";
+		$loanQuery = "((select with_username as nm, txn_date, type, txn_desc, tot_amt, (-with_amt) as with_amt from participates p, transaction t, users u where p.email_add = '".$_SESSION['email']."' and u.email_add = p.email_add and t.txn_date between '".$_POST['start_date']."' and '".$_POST['end_date']."' and t.type = 'LN' and p.trans_id = t.trans_id) union (select p.email_add as nm, txn_date, type, txn_desc, tot_amt, with_amt from participates p, transaction t, users u where p.with_username = '".$_SESSION['email']."' and u.email_add = p.email_add and type = 'LN' and p.trans_id = t.trans_id and t.txn_date between '".$_POST['start_date']."' and '".$_POST['end_date']."'))";
 	}
 	else
 	{
 		$query = "select name, txn_date, txn_desc, tot_amt, shared_amt from shares s, transaction t, users u where u.email_add = s.email_add and s.trans_id = t.trans_id".$whereClause." order by txn_date desc";
 		
-		$payQuery = "((select with_username, txn_date, type, txn_desc, tot_amt, (-with_amt) as with_amt from participates p, transaction t, users u where p.email_add = '".$_SESSION['email']."' and u.email_add = p.email_add and t.type = 'PY' and p.trans_id = t.trans_id) union (select p.email_add, txn_date, type, txn_desc, tot_amt, with_amt from participates p, transaction t, users u where p.with_username = '".$_SESSION['email']."' and u.email_add = p.email_add and type = 'PY' and p.trans_id = t.trans_id))";
+		$payQuery = "((select with_username as nm, txn_date, type, txn_desc, tot_amt, (-with_amt) as with_amt from participates p, transaction t, users u where p.email_add = '".$_SESSION['email']."' and u.email_add = p.email_add and t.type = 'PY' and p.trans_id = t.trans_id) union (select p.email_add as nm , txn_date, type, txn_desc, tot_amt, with_amt from participates p, transaction t, users u where p.with_username = '".$_SESSION['email']."' and u.email_add = p.email_add and type = 'PY' and p.trans_id = t.trans_id))";
 		
-		$loanQuery = "((select with_username, txn_date, type, txn_desc, tot_amt, (-with_amt) as with_amt from participates p, transaction t, users u where p.email_add = '".$_SESSION['email']."' and u.email_add = p.email_add and t.type = 'LN' and p.trans_id = t.trans_id) union (select p.email_add, txn_date, type, txn_desc, tot_amt, with_amt from participates p, transaction t, users u where p.with_username = '".$_SESSION['email']."' and u.email_add = p.email_add and type = 'LN' and p.trans_id = t.trans_id))";
+		$loanQuery = "((select with_username as nm, txn_date, type, txn_desc, tot_amt, (-with_amt) as with_amt from participates p, transaction t, users u where p.email_add = '".$_SESSION['email']."' and u.email_add = p.email_add and t.type = 'LN' and p.trans_id = t.trans_id) union (select p.email_add as nm, txn_date, type, txn_desc, tot_amt, with_amt from participates p, transaction t, users u where p.with_username = '".$_SESSION['email']."' and u.email_add = p.email_add and type = 'LN' and p.trans_id = t.trans_id))";
 	}
 
 	$statement = oci_parse($connection, $query);
@@ -48,7 +48,7 @@
 	<br /><br />
 	<table class = "transactions" align = "center">
 	<tr>
-		<td colspan = "4" align = "center">
+		<td colspan = "5" align = "center">
 			<form name = 'viewtransaction' action='viewTransactions.php' method='post'>
 			Start Date: <input type="text" name="start_date" />
 			End Date: <input type="text" name="end_date" /><br />
@@ -78,13 +78,13 @@
 			echo "</tr>";
 			
 			echo "<tr>";			
-			echo $displayNameColumn."<td class = 'transactions'>Date</td><td class = 'transactions'>Description</td><td class = 'transactions'>Your Share</td><td class = 'transactions'>Total Amount</td>";			
+			echo $displayNameColumn."<td class = 'userNameColumn' >Name</td> <td class = 'transactions'>Date</td><td class = 'transactions'>Description</td><td class = 'transactions'>Your Share</td><td class = 'transactions'>Total Amount</td>";			
 			echo "</tr>";
 			$firstRow = 0;
 		}
 		
 		echo "<tr>";
-		echo $displayName."<td class = 'transactions'>".$row->TXN_DATE."</td><td class = 'transactions'>".$row->TXN_DESC."</td><td class = 'transactions'>".$row->SHARED_AMT."</td><td class = 'transactions'>".$row->TOT_AMT."</td>";
+		echo $displayName."<td class = 'transactions'>".$_SESSION['email']."<td class = 'transactions'>".$row->TXN_DATE."</td><td class = 'transactions'>".$row->TXN_DESC."</td><td class = 'transactions'>".$row->SHARED_AMT."</td><td class = 'transactions'>".$row->TOT_AMT."</td>";
 		echo "</tr>";
 		$myTotal = $myTotal + $row->SHARED_AMT;
 		$overallTotal = $overallTotal + $row->TOT_AMT;
@@ -130,7 +130,7 @@
 			echo "</tr>";
 			
 			echo "<tr>";			
-			echo $displayNameColumn."<td class = 'transactions'>Date</td><td class = 'transactions'>Description</td><td class = 'transactions'>Your Share</td><td class = 'transactions'>Total Amount</td>";			
+			echo $displayNameColumn."<td class = 'transactions'>Name</td><td class = 'transactions'>Date</td><td class = 'transactions'>Description</td><td class = 'transactions'>Your Share</td><td class = 'transactions'>Total Amount</td>";			
 			echo "</tr>";
 			$firstRow = 0;
 		}
@@ -147,7 +147,7 @@
 		}
 		
 		echo "<tr>";
-		echo $displayName."<td class = 'transactions'>".$row->TXN_DATE."</td><td class = 'transactions'>".$row->TXN_DESC."</td><td class = 'transactions'>".$mode."</td><td class = 'transactions'>".$row->TOT_AMT."</td>";
+		echo $displayName."<td class = 'transactions'>".$row->NM."</td><td class = 'transactions'>".$row->TXN_DATE."<td class = 'transactions'>".$row->TXN_DATE."</td><td class = 'transactions'>".$row->TXN_DESC."</td><td class = 'transactions'>".$mode."</td><td class = 'transactions'>".$row->TOT_AMT."</td>";
 		echo "</tr>";
 		$myTotal = $myTotal + $row->WITH_AMT;
 	}
@@ -205,7 +205,7 @@
 			echo "</tr>";
 			
 			echo "<tr>";			
-			echo $displayNameColumn."<td class = 'transactions'>Date</td><td class = 'transactions'>Description</td><td class = 'transactions'>Your Share</td><td class = 'transactions'>Total Amount</td>";			
+			echo $displayNameColumn."<td class = 'transactions'>Name</td><td class = 'transactions'>Date</td><td class = 'transactions'>Description</td><td class = 'transactions'>Your Share</td><td class = 'transactions'>Total Amount</td>";			
 			echo "</tr>";
 			$firstRow = 0;
 		}
@@ -222,7 +222,7 @@
 		}
 		
 		echo "<tr>";
-		echo $displayName."<td class = 'transactions'>".$row->TXN_DATE."</td><td class = 'transactions'>".$row->TXN_DESC."</td><td class = 'transactions'>".$mode."</td><td class = 'transactions'>".$row->TOT_AMT."</td>";
+		echo $displayName."<td class = 'transactions'>".$row->NM."</td><td class = 'transactions'>".$row->TXN_DATE."</td><td class = 'transactions'>".$row->TXN_DESC."</td><td class = 'transactions'>".$mode."</td><td class = 'transactions'>".$row->TOT_AMT."</td>";
 		echo "</tr>";
 		$myTotal = $myTotal + $row->WITH_AMT;
 	}

@@ -15,11 +15,35 @@
 				$give = 0;
 				$collect = 0;
 				
-				$queryGive = "select sum(with_amt) as amt from participates where email_add = '".$_SESSION['email']."'";
-				$stmt = oci_parse($connection, $queryGive);
+				$query = "select friend, sum(total) as amt from ((select with_username as friend, with_amt as total from participates where email_add = '".$_SESSION['email']."') union	(select email_add as friend, (-with_amt) as total from participates where with_username = '".$_SESSION['email']."')) group by friend";
+				
+				$stmt = oci_parse($connection, $query);
 				if (!oci_execute($stmt))
 				{
-					echo $queryGive;
+					echo $queryCollect;
+					die("Failed to execute query");
+				}
+				
+				while ($row = oci_fetch_object($stmt))
+				{
+					if ($row->AMT > 0)
+					{
+						$collect = $collect + $row->AMT;
+					}
+					else if ($row->AMT < 0)
+					{
+						$give = $give + $row->AMT;
+					}
+					/* We do not want to calculate 0 sums */
+				}
+				
+				/*
+				
+				$queryCollect = "select sum(with_amt) as amt from participates where email_add = '".$_SESSION['email']."'";
+				$stmt = oci_parse($connection, $queryCollect);
+				if (!oci_execute($stmt))
+				{
+					echo $queryCollect;
 					die("Failed to execute query");
 				}
 				$row = oci_fetch_object($stmt);
@@ -28,11 +52,11 @@
 					$collect = $row->AMT;
 				}
 				
-				$queryCollect = "select sum(with_amt) as amt from participates where with_username = '".$_SESSION['email']."'";
-				$stmt = oci_parse($connection, $queryCollect);
+				$queryGive = "select sum(with_amt) as amt from participates where with_username = '".$_SESSION['email']."'";
+				$stmt = oci_parse($connection, $queryGive);
 				if (!oci_execute($stmt))
 				{
-					echo $queryCollect;
+					echo $queryGive;
 					die("Failed to execute query");
 				}
 				$row = oci_fetch_object($stmt);
@@ -40,7 +64,7 @@
 				if ($row->AMT)
 				{
 					$give = $row->AMT;
-				}
+				}*/
 				
 				/* When payments and loans are included, the values can be negative
 				in that case, transfer the amount to other side */

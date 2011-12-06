@@ -27,7 +27,7 @@
 	<?php
 		/* First check for the actual 'give' type (right column summation) */
 		$firstRow = 1;
-		$query = "select email_add as friend, sum (with_amt) as amt from participates where with_username = '".$_SESSION['email']."' group by email_add order by amt";
+		$query = "select friend, sum(total) as amt from ((select with_username as friend, with_amt as total from participates where email_add = '".$_SESSION['email']."') union	(select email_add as friend, (-with_amt) as total from participates where with_username = '".$_SESSION['email']."')) group by friend";
 		$amtSet = "";
 		$amtLabelSet = "";
 		$nameSet = "";
@@ -40,10 +40,12 @@
 		while ($row = oci_fetch_object($statement))
 		{
 			/* If the amount is 0 or negative, it should not be displayed */
-			if ($row->AMT <= 0)
+			if ($row->AMT >= 0)
 			{
 				continue;
 			}
+			
+			$row->AMT = (-$row->AMT);
 
 			if ($firstRow == 1)
 			{
@@ -60,39 +62,6 @@
 				$nameSet = $nameSet."|".$row->FRIEND;
 			}
 			echo "<tr><td class = 'transactions'>".$row->FRIEND."</td><td class = 'transactions'>".$row->AMT."</td></tr>";
-		}
-		
-		/* First check for the actual 'give' type (right column summation) */
-		$query = "select with_username as friend, sum (with_amt) as amt from participates where email_add = '".$_SESSION['email']."' group by with_username order by amt";
-		$statement = oci_parse($connection, $query);
-		if (!oci_execute($statement))
-		{
-			die($query);
-		}
-
-		while ($row = oci_fetch_object($statement))
-		{
-			/* If the amount is 0 or negative, it should not be displayed */
-			if ($row->AMT >= 0)
-			{
-				continue;
-			}
-
-			if ($firstRow == 1)
-			{
-				echo "<tr><td class = 'transactions'>Friend</td><td class = 'transactions'>Amount</td></tr>";
-				$firstRow = 0;
-				$amtSet = "".(-$row->AMT);
-				$amtLabelSet = $row->FRIEND." (".(-$row->AMT).")";
-				$nameSet = "".$row->FRIEND;
-			}
-			else
-			{
-				$amtSet = $amtSet.",".(-$row->AMT);
-				$amtLabelSet = $amtLabelSet."|".$row->FRIEND." (".(-$row->AMT).")";
-				$nameSet = $nameSet."|".$row->FRIEND;
-			}
-			echo "<tr><td class = 'transactions'>".$row->FRIEND."</td><td class = 'transactions'>".(-$row->AMT)."</td></tr>";
 		}
 	?>
 	</table>

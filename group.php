@@ -59,11 +59,12 @@
 		$finalStatement = oci_parse($connection, $finalQuery);
 		if (!oci_execute($finalStatement))
 		{
-			echo $finalQuery;
-			die("Friend cannot be added!");
+			echo("<br /><br />The user is already present in the selected group. Try again!");
 		}
-		
-		header("Location:home.php");
+		else
+		{
+			header("Location:home.php");
+		}
 	}
 	/***************     Deleting a friend from a group  *************************/
 	else if (isset($_POST['delete_friend']))
@@ -124,6 +125,49 @@
 	<tr>
 	<td bgcolor = '#A4C639'>
 	Add a friend to a group
+	</td>
+	</tr>
+	<tr>
+	<td>	
+	<!--Friend <input type="text" name="add_friend_email" /> to -->
+	Friend 
+	<select name="add_friend_email">
+		<option selected>----</option>
+		<?php
+		$query = "select friend_email_add from has_friends where email_add = '".$_SESSION['email']."'";
+		$statement = oci_parse($connection, $query);
+		if (!oci_execute($statement))
+		{
+			echo $query;
+			die("Failed to execute query!");
+		}
+
+		while (1)
+		{
+			$row = oci_fetch_object($statement);
+
+			if (!$row)
+			{
+				break;
+			}
+
+			$subQuery = "select name from users where email_add = '".$row->FRIEND_EMAIL_ADD."'";
+			$subStatement = oci_parse($connection, $subQuery);
+			if (!oci_execute($subStatement))
+			{
+				echo $subQuery;
+				die("Failed to execute subquery!");
+			}
+		
+			$friendName = oci_fetch_object($subStatement);
+
+			echo "<option name= 'delete_email' value = '".$row->FRIEND_EMAIL_ADD."'>".$friendName->NAME." (".$row->FRIEND_EMAIL_ADD.")</option>";
+		}
+		?>
+	</select>
+	to 
+	<!-- Show all groups to the user of which he is the owner -->
+	<select name = "to_group">
 	<?php
 		$grpQuery = "select group_id, group_name from usergroup where group_owner = '".$_SESSION['email']."'";
 		$statement = oci_parse($connection, $grpQuery);
@@ -132,16 +176,6 @@
 			echo $grpQuery;
 			die ("Failed to execute query!");
 		}
-		
-	?>
-	</td>
-	</tr>
-	<tr>
-	<td>	
-	Friend <input type="text" name="add_friend_email" /> to
-	<!-- Show all groups to the user of which he is the owner -->
-	<select name = "to_group">
-	<?php
 		while (1)
 		{
 			$row = oci_fetch_object($statement);
